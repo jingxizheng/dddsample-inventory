@@ -8,35 +8,45 @@ import java.util.Objects;
 /**
  * 逻辑库存
  */
-public class LogicStore extends AbstractStore<LogicStore> {
+public class LogicStore extends AbstractStore implements ValueObject<LogicStore> {
 
     private LogicStore storeType;
 
-    private PhysicalStore physicalStore;
+    private PhysicalStore physicalStore; // 所属物理库存
 
-    public LogicStore(WarehouseId warehouseId, WarehouseInfo warehouseInfo, List<Goods> goodsList) {
-        super(warehouseId, warehouseInfo, goodsList);
+    public LogicStore(List<Goods> goodsList, List<Goods> pendingGoodsList) {
+        super(goodsList, pendingGoodsList);
     }
 
-    public LogicStore(WarehouseId warehouseId, WarehouseInfo warehouseInfo, List<Goods> goodsList, LogicStore storeType) {
-        super(warehouseId, warehouseInfo, goodsList);
-        this.storeType = storeType;
-    }
-
-    public PhysicalOrder inStore(List<Goods> inStoreGoodsList) {
-        super.add(inStoreGoodsList);
+    public LogicOrder inStore() {
+        super.add();
+        this.physicalStore.inStore();
         // TODO 生成入库单据
         return null;
     }
 
-    public PhysicalOrder outStore(List<Goods> outStoreGoodsList) {
-        super.reduce(outStoreGoodsList);
+    public LogicOrder outStore() {
+        super.reduce();
+        this.physicalStore.outStore();
         // TODO 生成出库单据
         return null;
     }
 
+    /**
+     * 判断是否在同一个物理仓库中
+     */
+    public boolean somePhysicalStoreAs(LogicStore other) {
+        return other != null && this.physicalStore.sameIdentityAs(other.physicalStore);
+    }
 
-    public enum StoreType implements ValueObject<StoreType>{
+    @Override
+    public boolean sameValueAs(LogicStore other) {
+        return other != null &&
+                Objects.equals(this.storeType, other.storeType) &&
+                this.physicalStore.sameIdentityAs(other.physicalStore);
+    }
+
+    public enum StoreType implements ValueObject<StoreType> {
         SALES, // 销售仓库
         DEFECTIVE, // 次品仓库
         RETURN; // 退货仓库
