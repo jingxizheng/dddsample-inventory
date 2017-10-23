@@ -1,6 +1,7 @@
 package com.linesum.inventory.domain.model.store;
 
 import com.google.common.base.Preconditions;
+import com.linesum.inventory.domain.model.order.Contact;
 import com.linesum.inventory.domain.shared.ValueObject;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.logging.Log;
@@ -13,21 +14,17 @@ public class WarehouseInfo implements ValueObject<WarehouseInfo> {
 
     private final static Log LOGGER = LogFactory.getLog(WarehouseInfo.class);
 
-    private String name;
-
-    private String address;
+    private Contact contact;
 
     private Integer usedCapacity;
 
     private Integer totalCapacity;
 
-    public WarehouseInfo(String name, String address, Integer usedCapacity, Integer totalCapacity) {
-        Preconditions.checkNotNull(name, "name is required");
-        Preconditions.checkNotNull(address, "address is required");
+    public WarehouseInfo(Contact contact, Integer usedCapacity, Integer totalCapacity) {
+        Preconditions.checkNotNull(contact, "contact is required");
         Preconditions.checkNotNull(usedCapacity, "usedCapacity is required");
         Preconditions.checkNotNull(totalCapacity, "totalCapacity is required");
-        this.name = name;
-        this.address = address;
+        this.contact = contact;
         this.usedCapacity = usedCapacity;
         this.totalCapacity = totalCapacity;
     }
@@ -51,8 +48,7 @@ public class WarehouseInfo implements ValueObject<WarehouseInfo> {
     @Override
     public boolean sameValueAs(WarehouseInfo other) {
         return other != null && new EqualsBuilder().
-                append(this.name, other.name).
-                append(this.address, other.address).
+                append(this.contact, other.contact).
                 append(this.usedCapacity, other.usedCapacity).
                 append(this.totalCapacity, other.totalCapacity).
                 isEquals();

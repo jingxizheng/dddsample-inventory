@@ -1,5 +1,6 @@
 package com.linesum.inventory.domain.model.store;
 
+import com.linesum.inventory.domain.model.order.LogicOrder;
 import com.linesum.inventory.domain.shared.ValueObject;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Objects;
  */
 public class LogicStore extends AbstractStore implements ValueObject<LogicStore> {
 
-    private LogicStore storeType;
+    private StoreType storeType = StoreType.TYPE_LOGIC;
 
     private PhysicalStore physicalStore; // 所属物理库存
 
@@ -46,14 +47,4 @@ public class LogicStore extends AbstractStore implements ValueObject<LogicStore>
                 this.physicalStore.sameIdentityAs(other.physicalStore);
     }
 
-    public enum StoreType implements ValueObject<StoreType> {
-        SALES, // 销售仓库
-        DEFECTIVE, // 次品仓库
-        RETURN; // 退货仓库
-
-        @Override
-        public boolean sameValueAs(StoreType other) {
-            return other != null && Objects.equals(this, other);
-        }
-    }
 }

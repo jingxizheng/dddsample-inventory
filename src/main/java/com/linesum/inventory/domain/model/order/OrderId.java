@@ -1,4 +1,4 @@
-package com.linesum.inventory.domain.model.store;
+package com.linesum.inventory.domain.model.order;
 
 import com.google.common.base.Preconditions;
 import com.linesum.inventory.domain.shared.ValueObject;
@@ -10,13 +10,9 @@ import java.util.Objects;
  */
 public class OrderId implements ValueObject<OrderId> {
 
-    private String id;
+    private Long id;
 
-    public String idString() {
-        return id;
-    }
-
-    public OrderId(String id) {
+    public OrderId(Long id) {
         Preconditions.checkNotNull(id, "id is required");
         this.id = id;
     }

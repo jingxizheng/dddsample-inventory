@@ -5,10 +5,12 @@ import com.linesum.inventory.domain.shared.Entity;
 /**
  * 物流
  */
-public class Logistics {
+public class Logistics implements Entity<Logistics> {
 
-    private String name;
-    private String phoneNumber;
+    private LogisticsId logisticsId;
 
-
+    @Override
+    public boolean sameIdentityAs(Logistics other) {
+        return other != null && this.logisticsId.sameValueAs(other.logisticsId);
+    }
 }
