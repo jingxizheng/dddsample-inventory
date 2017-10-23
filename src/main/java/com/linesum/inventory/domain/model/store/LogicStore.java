@@ -1,8 +1,11 @@
 package com.linesum.inventory.domain.model.store;
 
+import com.linesum.inventory.domain.model.order.Contact;
 import com.linesum.inventory.domain.model.order.LogicOrder;
+import com.linesum.inventory.domain.model.order.OrderId;
 import com.linesum.inventory.domain.shared.ValueObject;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,17 +22,30 @@ public class LogicStore extends AbstractStore implements ValueObject<LogicStore>
         super(goodsList, pendingGoodsList);
     }
 
-    public LogicOrder inStore() {
+    public LogicOrder inStore(OrderId orderId, Contact sender) {
         super.add();
         this.physicalStore.inStore();
-        // TODO 生成入库单据
-        return null;
+        return new LogicOrder(
+                orderId,
+                this.physicalStore.getWarehouseInfo().getContact(),
+                sender,
+                super.pendingGoodsList,
+                new Date());
     }
 
-    public LogicOrder outStore() {
+    public LogicOrder outStore(OrderId orderId, Contact acceptor) {
         super.reduce();
         this.physicalStore.outStore();
-        // TODO 生成出库单据
+        return new LogicOrder(
+                orderId,
+                acceptor,
+                this.physicalStore.getWarehouseInfo().getContact(),
+                super.pendingGoodsList,
+                new Date());
+    }
+
+    public LogicOrder transter(LogicStore from) {
+
         return null;
     }
 

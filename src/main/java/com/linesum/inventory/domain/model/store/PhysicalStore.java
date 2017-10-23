@@ -1,7 +1,6 @@
 package com.linesum.inventory.domain.model.store;
 
 import com.google.common.base.Preconditions;
-import com.linesum.inventory.domain.model.order.PhysicalOrder;
 import com.linesum.inventory.domain.shared.Entity;
 
 import java.util.List;
@@ -21,6 +20,10 @@ public class PhysicalStore extends AbstractStore implements Entity<PhysicalStore
         super(goodsList, pendingGoodsList);
     }
 
+    public WarehouseInfo getWarehouseInfo() {
+        return warehouseInfo;
+    }
+
     /**
      * 计算商品数量总和
      */
@@ -30,22 +33,20 @@ public class PhysicalStore extends AbstractStore implements Entity<PhysicalStore
                 sum();
     }
 
-    public PhysicalOrder inStore() {
+    public void inStore() {
         final Integer totalAddGoodsQty = this.calculateTotalPendingGoodsQty();
         Preconditions.checkArgument(this.warehouseInfo.enoughTotalCapacity(totalAddGoodsQty),
                 "warehouse capacity does not enough");
         super.add();
-        // TODO 生成收货单据 -> 通知盘点
-        return null;
+        // TODO 通知仓库管理员
     }
 
-    public PhysicalOrder outStore() {
+    public void outStore() {
         final Integer totalReduceGoodsQty = this.calculateTotalPendingGoodsQty();
         Preconditions.checkArgument(this.warehouseInfo.enoughUsedCapacity(totalReduceGoodsQty),
                 "warehouse store quantity does not enough");
         super.reduce();
-        // TODO 生成发货单据 -> 通知物流
-        return null;
+        // TODO 通知仓库管理员
     }
 
     @Override

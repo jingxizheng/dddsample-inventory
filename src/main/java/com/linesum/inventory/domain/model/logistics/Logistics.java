@@ -7,7 +7,11 @@ import com.linesum.inventory.domain.shared.Entity;
  */
 public class Logistics implements Entity<Logistics> {
 
-    private LogisticsId logisticsId;
+    private LogisticsId logisticsId; // 物流ID
+
+    private String logisticsNo; // 物流单号
+
+    private static final String INIT_LOGISTICS_NO = null;
 
     @Override
     public boolean sameIdentityAs(Logistics other) {
