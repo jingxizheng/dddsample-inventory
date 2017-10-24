@@ -1,6 +1,7 @@
 package com.linesum.inventory.domain.model.store;
 
 import com.google.common.base.Preconditions;
+import com.linesum.inventory.domain.shared.Entity;
 
 import java.util.Collections;
 import java.util.List;
@@ -8,7 +9,9 @@ import java.util.List;
 /**
  * 抽象库存
  */
-public abstract class AbstractStore {
+public abstract class AbstractStore implements Entity<AbstractStore> {
+
+    protected WarehouseId warehouseId;
 
     protected List<Goods> goodsList;
 
@@ -55,4 +58,10 @@ public abstract class AbstractStore {
     public List<Goods> getGoodsList() {
         return goodsList;
     }
+
+    @Override
+    public boolean sameIdentityAs(AbstractStore other) {
+        return other != null && this.warehouseId.sameValueAs(other.warehouseId);
+    }
+
 }

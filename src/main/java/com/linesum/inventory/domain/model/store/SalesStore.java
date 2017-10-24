@@ -4,7 +4,6 @@ import com.google.common.base.Preconditions;
 import com.linesum.inventory.domain.model.storeconfig.StoreConfig;
 import com.linesum.inventory.domain.model.storeconfig.StoreConfigHandler;
 import com.linesum.inventory.domain.model.storeconfig.StoreConfigHandlerImpl;
-import com.linesum.inventory.domain.shared.ValueObject;
 
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +11,7 @@ import java.util.List;
 /**
  * 渠道销售库存
  */
-public class SalesStore extends AbstractStore implements ValueObject<SalesStore> {
+public class SalesStore extends AbstractStore {
 
     private StoreType storeType = StoreType.TYPE_SALES;
 
@@ -93,8 +92,4 @@ public class SalesStore extends AbstractStore implements ValueObject<SalesStore>
         return lockGoodsList;
     }
 
-    @Override
-    public boolean sameValueAs(SalesStore other) {
-        return false;
-    }
 }

@@ -1,18 +1,16 @@
 package com.linesum.inventory.domain.model.store;
 
 import com.google.common.base.Preconditions;
-import com.linesum.inventory.domain.shared.Entity;
 
 import java.util.List;
 
 /**
  * 物理库存
  */
-public class PhysicalStore extends AbstractStore implements Entity<PhysicalStore> {
+public class PhysicalStore extends AbstractStore {
 
     private StoreType storeType = StoreType.TYPE_WARE;
 
-    private WarehouseId warehouseId;
 
     private WarehouseInfo warehouseInfo;
 
@@ -21,7 +19,7 @@ public class PhysicalStore extends AbstractStore implements Entity<PhysicalStore
     }
 
     public WarehouseId getWarehouseId() {
-        return warehouseId;
+        return super.warehouseId;
     }
 
     public WarehouseInfo getWarehouseInfo() {
@@ -49,11 +47,6 @@ public class PhysicalStore extends AbstractStore implements Entity<PhysicalStore
         Preconditions.checkArgument(this.warehouseInfo.enoughUsedCapacity(totalReduceGoodsQty),
                 "warehouse store quantity does not enough");
         super.reduce();
-    }
-
-    @Override
-    public boolean sameIdentityAs(PhysicalStore other) {
-        return other != null && this.warehouseId.sameValueAs(other.warehouseId);
     }
 
 }
