@@ -13,7 +13,6 @@ public class PhysicalOrder extends AbstractOrder {
 
     private Logistics logistics;
 
-
     public PhysicalOrder(OrderId orderId, Contact acceptor, Contact sender, List<Goods> goodsList, Date sendDate) {
         super(orderId, acceptor, sender, goodsList, sendDate);
     }

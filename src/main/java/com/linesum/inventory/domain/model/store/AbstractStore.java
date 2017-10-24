@@ -2,6 +2,7 @@ package com.linesum.inventory.domain.model.store;
 
 import com.google.common.base.Preconditions;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -18,6 +19,11 @@ public abstract class AbstractStore {
         Preconditions.checkNotNull(pendingGoodsList, "pendingGoodsList is required");
         this.goodsList = goodsList;
         this.pendingGoodsList = pendingGoodsList;
+    }
+
+    public AbstractStore() {
+        this.goodsList = Collections.EMPTY_LIST;
+        this.pendingGoodsList = Collections.EMPTY_LIST;
     }
 
     /**
@@ -46,4 +52,7 @@ public abstract class AbstractStore {
         }
     }
 
+    public List<Goods> getGoodsList() {
+        return goodsList;
+    }
 }

@@ -20,6 +20,10 @@ public class PhysicalStore extends AbstractStore implements Entity<PhysicalStore
         super(goodsList, pendingGoodsList);
     }
 
+    public WarehouseId getWarehouseId() {
+        return warehouseId;
+    }
+
     public WarehouseInfo getWarehouseInfo() {
         return warehouseInfo;
     }
@@ -38,7 +42,6 @@ public class PhysicalStore extends AbstractStore implements Entity<PhysicalStore
         Preconditions.checkArgument(this.warehouseInfo.enoughTotalCapacity(totalAddGoodsQty),
                 "warehouse capacity does not enough");
         super.add();
-        // TODO 通知仓库管理员
     }
 
     public void outStore() {
@@ -46,7 +49,6 @@ public class PhysicalStore extends AbstractStore implements Entity<PhysicalStore
         Preconditions.checkArgument(this.warehouseInfo.enoughUsedCapacity(totalReduceGoodsQty),
                 "warehouse store quantity does not enough");
         super.reduce();
-        // TODO 通知仓库管理员
     }
 
     @Override

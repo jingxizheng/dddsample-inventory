@@ -4,6 +4,7 @@ import com.linesum.inventory.domain.model.order.Contact;
 import com.linesum.inventory.domain.model.order.LogicOrder;
 import com.linesum.inventory.domain.model.order.OrderId;
 import com.linesum.inventory.domain.shared.ValueObject;
+import org.springframework.core.annotation.Order;
 
 import java.util.Date;
 import java.util.List;
@@ -44,9 +45,18 @@ public class LogicStore extends AbstractStore implements ValueObject<LogicStore>
                 new Date());
     }
 
-    public LogicOrder transter(LogicStore from) {
-
-        return null;
+    public LogicOrder transfer(OrderId orderId, LogicStore from) throws TransferException {
+        if (!this.somePhysicalStoreAs(from)) {
+            throw new TransferException(from.physicalStore.getWarehouseId(), this.physicalStore.getWarehouseId());
+        }
+        super.add();
+        from.reduce();
+        return new LogicOrder(
+                orderId,
+                this.physicalStore.getWarehouseInfo().getContact(),
+                from.physicalStore.getWarehouseInfo().getContact(),
+                super.pendingGoodsList,
+                new Date());
     }
 
     /**

@@ -3,6 +3,7 @@ package com.linesum.inventory.domain.model.store;
 import com.linesum.inventory.domain.shared.Entity;
 
 import java.math.BigDecimal;
+import java.math.MathContext;
 
 /**
  * 商品
@@ -25,6 +26,12 @@ public class Goods implements Entity<Goods> {
 
     public void reduce(Integer reduceQuantity) {
         this.qty -= reduceQuantity;
+    }
+
+    public void multiply(BigDecimal ratio) {
+        this.qty = new BigDecimal(this.qty).multiply(ratio)
+                .setScale(0, BigDecimal.ROUND_FLOOR)
+                .intValue();
     }
 
     @Override
