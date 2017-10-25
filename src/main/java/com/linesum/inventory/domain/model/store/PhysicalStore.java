@@ -1,52 +1,110 @@
 package com.linesum.inventory.domain.model.store;
 
 import com.google.common.base.Preconditions;
+import com.linesum.inventory.domain.shared.Entity;
+import com.linesum.inventory.domain.shared.ValueObject;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 物理库存
  */
-public class PhysicalStore extends AbstractStore {
+public class PhysicalStore implements Entity<PhysicalStore> {
+
+    private PhysicalStoreId physicalStoreId;
 
     private StoreType storeType = StoreType.TYPE_WARE;
 
+    private WarehouseId warehouseId;
 
     private WarehouseInfo warehouseInfo;
 
-    public PhysicalStore(List<Goods> goodsList, List<Goods> pendingGoodsList) {
-        super(goodsList, pendingGoodsList);
+    private List<Goods> goodsList;
+
+    public PhysicalStore(PhysicalStoreId physicalStoreId, WarehouseId warehouseId, WarehouseInfo warehouseInfo, List<Goods> goodsList) {
+        this.physicalStoreId = physicalStoreId;
+        this.warehouseId = warehouseId;
+        this.warehouseInfo = warehouseInfo;
+        this.goodsList = goodsList;
+    }
+
+    /**
+     * 计算商品数量总和
+     */
+    private Integer calculateTotalGoodsQty(List<Goods> goodsList) {
+        return goodsList.stream().
+                mapToInt(Goods::getQty).
+                sum();
+    }
+
+    public void inStore(List<Goods> pendingGoodsList) {
+        final Integer totalAddGoodsQty = this.calculateTotalGoodsQty(pendingGoodsList);
+        Preconditions.checkArgument(this.warehouseInfo.enoughTotalCapacity(totalAddGoodsQty),
+                "warehouse capacity does not enough");
+        for (Goods addGoods : pendingGoodsList) {
+            for (Goods storeGoods : this.goodsList) {
+                if (addGoods.sameIdentityAs(storeGoods)) {
+                    storeGoods.add(addGoods.getQty());
+                }
+            }
+        }
+    }
+
+    public void outStore(List<Goods> pendingGoodsList) {
+        final Integer totalReduceGoodsQty = this.calculateTotalGoodsQty(pendingGoodsList);
+        Preconditions.checkArgument(this.warehouseInfo.enoughUsedCapacity(totalReduceGoodsQty),
+                "warehouse store quantity does not enough");
+        for (Goods reduceGoods : pendingGoodsList) {
+            for (Goods storeGoods : this.goodsList) {
+                if (reduceGoods.sameIdentityAs(storeGoods)) {
+                    storeGoods.reduce(reduceGoods.getQty());
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean sameIdentityAs(PhysicalStore other) {
+        return other != null && this.physicalStoreId.sameValueAs(other.getPhysicalStoreId());
+    }
+
+    public PhysicalStoreId getPhysicalStoreId() {
+        return physicalStoreId;
+    }
+
+    public StoreType getStoreType() {
+        return storeType;
     }
 
     public WarehouseId getWarehouseId() {
-        return super.warehouseId;
+        return warehouseId;
     }
 
     public WarehouseInfo getWarehouseInfo() {
         return warehouseInfo;
     }
 
-    /**
-     * 计算商品数量总和
-     */
-    private Integer calculateTotalPendingGoodsQty() {
-        return super.pendingGoodsList.stream().
-                mapToInt(Goods::getQty).
-                sum();
+    public List<Goods> getGoodsList() {
+        return goodsList;
     }
 
-    public void inStore() {
-        final Integer totalAddGoodsQty = this.calculateTotalPendingGoodsQty();
-        Preconditions.checkArgument(this.warehouseInfo.enoughTotalCapacity(totalAddGoodsQty),
-                "warehouse capacity does not enough");
-        super.add();
-    }
+    public static class PhysicalStoreId implements ValueObject<PhysicalStoreId> {
 
-    public void outStore() {
-        final Integer totalReduceGoodsQty = this.calculateTotalPendingGoodsQty();
-        Preconditions.checkArgument(this.warehouseInfo.enoughUsedCapacity(totalReduceGoodsQty),
-                "warehouse store quantity does not enough");
-        super.reduce();
+        private Long id;
+
+        public PhysicalStoreId(Long id) {
+            this.id = id;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        @Override
+        public boolean sameValueAs(PhysicalStoreId other) {
+            return other != null && Objects.equals(this.id, other.getId());
+        }
     }
 
 }

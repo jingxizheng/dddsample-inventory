@@ -16,6 +16,12 @@ public class Goods implements Entity<Goods> {
 
     private BigDecimal price = BigDecimal.ZERO;
 
+    public Goods(SkuCode skuCode, Integer qty, BigDecimal price) {
+        this.skuCode = skuCode;
+        this.qty = qty;
+        this.price = price;
+    }
+
     public Integer getQty() {
         return qty;
     }

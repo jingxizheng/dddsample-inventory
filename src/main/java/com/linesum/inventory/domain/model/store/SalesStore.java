@@ -4,16 +4,23 @@ import com.google.common.base.Preconditions;
 import com.linesum.inventory.domain.model.storeconfig.StoreConfig;
 import com.linesum.inventory.domain.model.storeconfig.StoreConfigHandler;
 import com.linesum.inventory.domain.model.storeconfig.StoreConfigHandlerImpl;
+import com.linesum.inventory.domain.shared.Entity;
+import com.linesum.inventory.domain.shared.ValueObject;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 渠道销售库存
  */
-public class SalesStore extends AbstractStore {
+public class SalesStore implements Entity<SalesStore> {
+
+    private SalesStoreId salesStoreId;
 
     private StoreType storeType = StoreType.TYPE_SALES;
+
+    private List<Goods> goodsList;
 
     private PhysicalStore physicalStore; // 所属物理库存
 
@@ -25,9 +32,10 @@ public class SalesStore extends AbstractStore {
 
     private List<Goods> lockGoodsList; // 锁库库存
 
-    public SalesStore(PhysicalStore physicalStore, Channel channel,
-                      List<StoreConfigHandler> storeConfigHandlers, List<SalesStore> otherSalesStore) {
-        super();
+    public SalesStore(PhysicalStore physicalStore,
+                      Channel channel,
+                      List<StoreConfigHandler> storeConfigHandlers,
+                      List<SalesStore> otherSalesStore) {
         Preconditions.checkNotNull(physicalStore, "physicalStore is required");
         Preconditions.checkNotNull(channel, "channel is required");
         Preconditions.checkNotNull(storeConfigHandlers, "storeConfigHandlers is required");
@@ -36,8 +44,8 @@ public class SalesStore extends AbstractStore {
         this.channel = channel;
         this.storeConfigHandlers = storeConfigHandlers;
         this.otherSalesStoreList = otherSalesStore;
-        this.lockGoodsList = this.calumniateLockGoodsList(physicalStore.goodsList);
-        super.goodsList = this.executeStoreConfig(physicalStore.goodsList);
+        this.lockGoodsList = this.calumniateLockGoodsList(physicalStore.getGoodsList());
+        this.goodsList = this.executeStoreConfig(physicalStore.getGoodsList());
     }
 
     /**
@@ -84,12 +92,59 @@ public class SalesStore extends AbstractStore {
         return storeConfig.getGoodsList();
     }
 
+    @Override
+    public boolean sameIdentityAs(SalesStore other) {
+        return other != null && this.salesStoreId.sameValueAs(other.getSalesStoreId());
+    }
+
+    public SalesStoreId getSalesStoreId() {
+        return salesStoreId;
+    }
+
+    public StoreType getStoreType() {
+        return storeType;
+    }
+
+    public List<Goods> getGoodsList() {
+        return goodsList;
+    }
+
     public PhysicalStore getPhysicalStore() {
         return physicalStore;
+    }
+
+    public Channel getChannel() {
+        return channel;
+    }
+
+    public List<StoreConfigHandler> getStoreConfigHandlers() {
+        return storeConfigHandlers;
+    }
+
+    public List<SalesStore> getOtherSalesStoreList() {
+        return otherSalesStoreList;
     }
 
     public List<Goods> getLockGoodsList() {
         return lockGoodsList;
     }
 
+
+    public static class SalesStoreId implements ValueObject<SalesStoreId> {
+
+        private Long id;
+
+        public SalesStoreId(Long id) {
+            this.id = id;
+        }
+
+        public Long getId() {
+            return id;
+        }
+
+        @Override
+        public boolean sameValueAs(SalesStoreId other) {
+            return other != null && Objects.equals(this.id, other.getId());
+        }
+    }
 }

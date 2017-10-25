@@ -16,6 +16,10 @@ public class SkuCode implements ValueObject<SkuCode> {
         return this.code;
     }
 
+    public SkuCode(String code) {
+        this.code = code;
+    }
+
     @Override
     public boolean sameValueAs(SkuCode other) {
         return other != null && Objects.equals(this.code, other.code);
