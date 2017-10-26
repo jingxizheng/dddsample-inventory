@@ -20,11 +20,6 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public LogicOrder transferInLogicStore(List<SkuCode> skuCodeList, WarehouseId warehouseId) {
-        LogicStore logicStore = logicStoreRepository.find(warehouseId);
-
-        List<Goods> goodsList = goodsRepository.find(skuCodeList);
-
-
         return null;
     }
 

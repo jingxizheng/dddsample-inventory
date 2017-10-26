@@ -1,7 +1,5 @@
 package com.linesum.inventory.infrastructure.persistence.jpa.po;
 
-import com.linesum.inventory.domain.model.order.ContactId;
-
 import javax.persistence.*;
 
 /**
@@ -20,6 +18,16 @@ public class ContactPo {
     private String address;
 
     private String telephone;
+
+    public ContactPo() {
+    }
+
+    public ContactPo(Long id, String name, String address, String telephone) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.telephone = telephone;
+    }
 
     public Long getId() {
         return id;

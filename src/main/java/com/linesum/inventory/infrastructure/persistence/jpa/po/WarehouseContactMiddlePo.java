@@ -15,6 +15,17 @@ public class WarehouseContactMiddlePo {
 
     private Long contactId;
 
+    private Long warehouseId;
+
+    public WarehouseContactMiddlePo() {
+    }
+
+    public WarehouseContactMiddlePo(Long id, Long contactId, Long warehouseId) {
+        this.id = id;
+        this.contactId = contactId;
+        this.warehouseId = warehouseId;
+    }
+
     public Long getId() {
         return id;
     }
@@ -38,6 +49,4 @@ public class WarehouseContactMiddlePo {
     public void setWarehouseId(Long warehouseId) {
         this.warehouseId = warehouseId;
     }
-
-    private Long warehouseId;
 }

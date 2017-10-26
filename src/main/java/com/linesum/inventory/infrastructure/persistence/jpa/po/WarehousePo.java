@@ -15,11 +15,18 @@ public class WarehousePo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Long contactId;
-
     private Integer usedCapacity;
 
     private Integer totalCapacity;
+
+    public WarehousePo() {
+    }
+
+    public WarehousePo(Long id, Integer usedCapacity, Integer totalCapacity) {
+        this.id = id;
+        this.usedCapacity = usedCapacity;
+        this.totalCapacity = totalCapacity;
+    }
 
     public Long getId() {
         return id;
@@ -27,14 +34,6 @@ public class WarehousePo {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getContactId() {
-        return contactId;
-    }
-
-    public void setContactId(Long contactId) {
-        this.contactId = contactId;
     }
 
     public Integer getUsedCapacity() {

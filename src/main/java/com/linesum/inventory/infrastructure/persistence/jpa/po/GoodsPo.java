@@ -16,9 +16,16 @@ public class GoodsPo {
 
     private String skuCode;
 
-    private Integer qty;
-
     private BigDecimal price;
+
+    public GoodsPo() {
+    }
+
+    public GoodsPo(Long id, String skuCode, BigDecimal price) {
+        this.id = id;
+        this.skuCode = skuCode;
+        this.price = price;
+    }
 
     public Long getId() {
         return id;
@@ -34,14 +41,6 @@ public class GoodsPo {
 
     public void setSkuCode(String skuCode) {
         this.skuCode = skuCode;
-    }
-
-    public Integer getQty() {
-        return qty;
-    }
-
-    public void setQty(Integer qty) {
-        this.qty = qty;
     }
 
     public BigDecimal getPrice() {

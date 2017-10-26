@@ -16,6 +16,10 @@ public class WarehouseId implements ValueObject<WarehouseId> {
         return id.toString();
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public WarehouseId(Long id) {
         Preconditions.checkNotNull(id, "id is required");
         this.id = id;

@@ -29,10 +29,6 @@ public class WarehouseInfo implements ValueObject<WarehouseInfo> {
         this.totalCapacity = totalCapacity;
     }
 
-    public Contact getContact() {
-        return contact;
-    }
-
     public boolean enoughTotalCapacity(Integer inspectedQty) {
         if (inspectedQty == null) {
             LOGGER.warn("inspectedQty should be required");
@@ -56,5 +52,17 @@ public class WarehouseInfo implements ValueObject<WarehouseInfo> {
                 append(this.usedCapacity, other.usedCapacity).
                 append(this.totalCapacity, other.totalCapacity).
                 isEquals();
+    }
+
+    public Contact getContact() {
+        return contact;
+    }
+
+    public Integer getUsedCapacity() {
+        return usedCapacity;
+    }
+
+    public Integer getTotalCapacity() {
+        return totalCapacity;
     }
 }

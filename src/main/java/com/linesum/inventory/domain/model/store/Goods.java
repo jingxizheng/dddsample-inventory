@@ -22,10 +22,6 @@ public class Goods implements Entity<Goods> {
         this.price = price;
     }
 
-    public Integer getQty() {
-        return qty;
-    }
-
     public void add(Integer addQuantity) {
         this.qty += addQuantity;
     }
@@ -43,5 +39,17 @@ public class Goods implements Entity<Goods> {
     @Override
     public boolean sameIdentityAs(Goods other) {
         return other != null && this.skuCode.sameValueAs(other.skuCode);
+    }
+
+    public SkuCode getSkuCode() {
+        return skuCode;
+    }
+
+    public Integer getQty() {
+        return qty;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
     }
 }

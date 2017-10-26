@@ -15,6 +15,10 @@ public class ContactId implements ValueObject<ContactId> {
         this.id = id;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     @Override
     public boolean sameValueAs(ContactId other) {
         return other != null && Objects.equals(this.id, other.id);

@@ -17,6 +17,18 @@ public class PhysicalStoreGoodsMiddlePo {
 
     private Long goodsId;
 
+    private Integer qty;
+
+    public PhysicalStoreGoodsMiddlePo() {
+    }
+
+    public PhysicalStoreGoodsMiddlePo(Long id, Long physicalStoreId, Long goodsId, Integer qty) {
+        this.id = id;
+        this.physicalStoreId = physicalStoreId;
+        this.goodsId = goodsId;
+        this.qty = qty;
+    }
+
     public Long getId() {
         return id;
     }
@@ -39,5 +51,13 @@ public class PhysicalStoreGoodsMiddlePo {
 
     public void setGoodsId(Long goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public Integer getQty() {
+        return qty;
+    }
+
+    public void setQty(Integer qty) {
+        this.qty = qty;
     }
 }

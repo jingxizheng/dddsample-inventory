@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository;
 public interface WarehouseContactMiddleRepositoryJpa extends CrudRepository<WarehouseContactMiddlePo, Long> {
 
     WarehouseContactMiddlePo findFirstByWarehouseId(Long warehouseId);
+
+    WarehouseContactMiddlePo findFirstByWarehouseIdAndContactId(Long warehouseId, Long contactId);
 }

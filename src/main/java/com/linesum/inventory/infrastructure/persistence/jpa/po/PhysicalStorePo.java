@@ -16,6 +16,14 @@ public class PhysicalStorePo {
 
     private Long warehouseId;
 
+    public PhysicalStorePo() {
+    }
+
+    public PhysicalStorePo(Long id, Long warehouseId) {
+        this.id = id;
+        this.warehouseId = warehouseId;
+    }
+
     public Long getId() {
         return id;
     }

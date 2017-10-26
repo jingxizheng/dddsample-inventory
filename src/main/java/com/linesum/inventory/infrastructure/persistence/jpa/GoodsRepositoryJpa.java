@@ -16,4 +16,6 @@ public interface GoodsRepositoryJpa extends CrudRepository<GoodsPo, Long> {
 
     List<GoodsPo> findBySkuCodeIn(List<String> skuCodeList);
 
+    List<GoodsPo> findByIdIn(List<Long> idList);
+
 }

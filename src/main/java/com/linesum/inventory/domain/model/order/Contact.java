@@ -31,4 +31,20 @@ public class Contact implements Entity<Contact> {
     public boolean sameIdentityAs(Contact other) {
         return other != null && this.customerId.sameValueAs(other.customerId);
     }
+
+    public ContactId getCustomerId() {
+        return customerId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
 }
