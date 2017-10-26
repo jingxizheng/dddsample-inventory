@@ -6,17 +6,17 @@ import com.linesum.inventory.domain.model.store.*;
 import com.linesum.inventory.infrastructure.persistence.jpa.*;
 import com.linesum.inventory.infrastructure.persistence.jpa.po.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * Created by zhengjx on 2017/10/25.
  */
+@Repository
 public class PhysicalStoreRepositoryImpl implements PhysicalStoreRepository {
 
     @Autowired
@@ -49,7 +49,7 @@ public class PhysicalStoreRepositoryImpl implements PhysicalStoreRepository {
 
         List<PhysicalStoreGoodsMiddlePo> physicalStoreGoodsMiddlePoList = physicalStoreGoodsMiddleRepositoryJpa.findByPhysicalStoreId(physicalStoreId.getId());
         List<Long> goodsIdList = physicalStoreGoodsMiddlePoList.stream()
-                .map(PhysicalStoreGoodsMiddlePo::getId)
+                .map(PhysicalStoreGoodsMiddlePo::getGoodsId)
                 .collect(Collectors.toList());
         List<GoodsPo> goodsPoList = goodsRepositoryJpa.findByIdIn(goodsIdList);
 
@@ -58,7 +58,7 @@ public class PhysicalStoreRepositoryImpl implements PhysicalStoreRepository {
                     GoodsPo goodsPo = goodsPoList.stream()
                             .filter(gPo -> Objects.equals(psgmPo.getGoodsId(), gPo.getId()))
                             .findFirst()
-                            .get();
+                            .get(); // FIXME
                     return new Goods(new SkuCode(goodsPo.getSkuCode()), psgmPo.getQty(), goodsPo.getPrice());
                 })
                 .collect(Collectors.toList());
@@ -74,7 +74,7 @@ public class PhysicalStoreRepositoryImpl implements PhysicalStoreRepository {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void save(PhysicalStore physicalStore) {
+    public PhysicalStore.PhysicalStoreId save(PhysicalStore physicalStore) {
         Long physicalStoreId = physicalStore.getPhysicalStoreId().getId();
         Long warehouseId = physicalStore.getWarehouseId().getId();
         WarehouseInfo warehouseInfo = physicalStore.getWarehouseInfo();
@@ -92,16 +92,17 @@ public class PhysicalStoreRepositoryImpl implements PhysicalStoreRepository {
                 contactPo.getId(),
                 warehousePo.getId()));
 
-        PhysicalStorePo physicalStorePo = physicalStoreRepositoryJpa.save(new PhysicalStorePo(physicalStoreId, warehouseId));
+        PhysicalStorePo physicalStorePo = physicalStoreRepositoryJpa.save(new PhysicalStorePo(physicalStoreId, warehousePo.getId()));
         physicalStoreGoodsMiddleRepositoryJpa.deleteByPhysicalStoreId(physicalStorePo.getId());
 
         List<PhysicalStoreGoodsMiddlePo> physicalStoreGoodsMiddlePoList = goodsList.stream()
                 .map(goods -> new PhysicalStoreGoodsMiddlePo(null,
                         physicalStorePo.getId(),
-                        goodsRepositoryJpa.findFirstBySkuCode(goods.getSkuCode().codeString()).getId(),
+                        goodsRepositoryJpa.findFirstBySkuCode(goods.getSkuCode().getCode()).getId(),
                         goods.getQty()))
                 .collect(Collectors.toList());
 
         physicalStoreGoodsMiddleRepositoryJpa.save(physicalStoreGoodsMiddlePoList);
+        return new PhysicalStore.PhysicalStoreId(physicalStorePo.getId());
     }
 }

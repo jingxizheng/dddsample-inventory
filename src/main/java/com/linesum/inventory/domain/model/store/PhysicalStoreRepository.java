@@ -4,5 +4,5 @@ public interface PhysicalStoreRepository {
 
     PhysicalStore find(PhysicalStore.PhysicalStoreId physicalStoreId);
 
-    void save(PhysicalStore store);
+    PhysicalStore.PhysicalStoreId save(PhysicalStore store);
 }

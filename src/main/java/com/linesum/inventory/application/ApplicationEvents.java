@@ -3,7 +3,10 @@ package com.linesum.inventory.application;
 import com.linesum.inventory.domain.model.store.PhysicalStore;
 
 /**
- * 应用事件 这个接口提供了一种方式让系统的其他部分知道发生乐什么事件
+ * 应用事件
+ *
+ * 告知其他服务(如物流服务)商品入库或者出库了 需要发货或者收货
+ * 可以在基础设施层 基于MQ实现或者RPC实现
  */
 public interface ApplicationEvents {
 

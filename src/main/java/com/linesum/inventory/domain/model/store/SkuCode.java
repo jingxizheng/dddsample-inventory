@@ -12,12 +12,12 @@ public class SkuCode implements ValueObject<SkuCode> {
 
     private String code;
 
-    public String codeString() {
-        return this.code;
-    }
-
     public SkuCode(String code) {
         this.code = code;
+    }
+
+    public String getCode() {
+        return code;
     }
 
     @Override

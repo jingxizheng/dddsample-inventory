@@ -21,7 +21,6 @@ public class WarehouseId implements ValueObject<WarehouseId> {
     }
 
     public WarehouseId(Long id) {
-        Preconditions.checkNotNull(id, "id is required");
         this.id = id;
     }
 
