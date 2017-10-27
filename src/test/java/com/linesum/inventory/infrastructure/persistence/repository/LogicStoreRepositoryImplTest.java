@@ -15,26 +15,30 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+import static org.junit.Assert.*;
+
 /**
- * Created by zhengjx on 2017/10/26.
+ * Created by zhengjx on 2017/10/27.
  */
-public class PhysicalStoreRepositoryImplTest extends BaseJunitTestCase {
+public class LogicStoreRepositoryImplTest extends BaseJunitTestCase {
 
     @Autowired
-    private GoodsRepositoryJpa goodsRepositoryJpa;
+    private LogicStoreRepository logicStoreRepository;
 
     @Autowired
     private PhysicalStoreRepository physicalStoreRepository;
 
+    @Autowired
+    private GoodsRepositoryJpa goodsRepositoryJpa;
+
     private GoodsPo goodsPo;
+
+    private PhysicalStore.PhysicalStoreId physicalStoreId;
 
     @Before
     public void setUp() throws Exception {
         goodsPo = goodsRepositoryJpa.save(new GoodsPo(null, UUID.randomUUID().toString(), new BigDecimal("100.00")));
-    }
 
-    @Test
-    public void test() throws Exception {
         PhysicalStore physicalStore = new PhysicalStore(
                 new PhysicalStore.PhysicalStoreId(null),
                 new WarehouseId(null),
@@ -46,31 +50,38 @@ public class PhysicalStoreRepositoryImplTest extends BaseJunitTestCase {
                         new Goods(new SkuCode(goodsPo.getSkuCode()), 100, goodsPo.getPrice())
                 )
         );
+        physicalStoreId = physicalStoreRepository.save(physicalStore);
+    }
+
+    @Test
+    public void test() throws Exception {
+        LogicStore logicStore = new LogicStore(
+                new LogicStore.LogicStoreId(null),
+                Lists.newArrayList(
+                        new Goods(new SkuCode(goodsPo.getSkuCode()), 100, goodsPo.getPrice())
+                ),
+                new PhysicalStore(physicalStoreId, null, null, null)
+        );
         // test save
-        PhysicalStore.PhysicalStoreId physicalStoreId = physicalStoreRepository.save(physicalStore);
+        LogicStore.LogicStoreId logicStoreId = logicStoreRepository.save(logicStore);
 
         // test find
-        PhysicalStore physicalStore1 = physicalStoreRepository.find(physicalStoreId);
-        Assertions.assertThat(physicalStore1)
+        LogicStore logicStore1 = logicStoreRepository.find(logicStoreId);
+        Assertions.assertThat(logicStore1)
                 .isNotNull()
                 .hasNoNullFieldsOrPropertiesExcept();
-        Assertions.assertThat(physicalStore1.getWarehouseInfo())
-                .isNotNull()
-                .hasFieldOrPropertyWithValue("usedCapacity", 100)
-                .hasFieldOrPropertyWithValue("totalCapacity", 1000);
-        Assertions.assertThat(physicalStore1.getWarehouseInfo().getContact())
-                .isNotNull()
-                .hasFieldOrPropertyWithValue("name", "contact_name")
-                .hasFieldOrPropertyWithValue("address", "contact_address")
-                .hasFieldOrPropertyWithValue("telephone", "15159866655");
-        Assertions.assertThat(physicalStore1.getGoodsList())
+
+        Assertions.assertThat(logicStore1.getPhysicalStore().getPhysicalStoreId().getId())
+                .isNotNull();
+
+        Assertions.assertThat(logicStore1.getGoodsList())
                 .isNotNull()
                 .isNotEmpty()
                 .extracting("qty", "price")
                 .contains(Assertions.tuple(100, new BigDecimal("100.00")));
-        Assertions.assertThat(physicalStore1.getGoodsList().get(0).getSkuCode().getCode())
+
+        Assertions.assertThat(logicStore1.getGoodsList().get(0).getSkuCode().getCode())
                 .isEqualTo(goodsPo.getSkuCode());
     }
-
 
 }

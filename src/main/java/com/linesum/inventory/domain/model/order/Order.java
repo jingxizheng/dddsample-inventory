@@ -11,7 +11,7 @@ import java.util.List;
  * 抽象订单
  *
  */
-public abstract class AbstractOrder implements Entity<AbstractOrder> {
+public class Order implements Entity<Order> {
 
     private OrderId orderId; // 订单ID
 
@@ -25,7 +25,7 @@ public abstract class AbstractOrder implements Entity<AbstractOrder> {
 
     private Date acceptorDate; // 收货日期
 
-    public AbstractOrder(OrderId orderId, Contact acceptor, Contact sender, List<Goods> goodsList, Date sendDate) {
+    public Order(OrderId orderId, Contact acceptor, Contact sender, List<Goods> goodsList, Date sendDate) {
         Preconditions.checkNotNull(acceptor, "acceptor is required");
         Preconditions.checkNotNull(orderId, "orderId is required");
         Preconditions.checkNotNull(sender, "sender is required");
@@ -38,8 +38,13 @@ public abstract class AbstractOrder implements Entity<AbstractOrder> {
         this.sendDate = sendDate;
     }
 
+    public Order addOrderId(OrderId orderId) {
+        this.orderId = orderId;
+        return this;
+    }
+
     @Override
-    public boolean sameIdentityAs(AbstractOrder other) {
+    public boolean sameIdentityAs(Order other) {
         return other != null && this.orderId.sameValueAs(other.orderId);
     }
 }

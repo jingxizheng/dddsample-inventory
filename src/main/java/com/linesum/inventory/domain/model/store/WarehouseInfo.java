@@ -29,6 +29,14 @@ public class WarehouseInfo implements ValueObject<WarehouseInfo> {
         this.totalCapacity = totalCapacity;
     }
 
+    public void addUsedCapacity(Integer qty) {
+        this.usedCapacity = usedCapacity + qty;
+    }
+
+    public void reduceUsedCapacity(Integer qty) {
+        this.usedCapacity = usedCapacity - qty;
+    }
+
     public boolean enoughTotalCapacity(Integer inspectedQty) {
         if (inspectedQty == null) {
             LOGGER.warn("inspectedQty should be required");

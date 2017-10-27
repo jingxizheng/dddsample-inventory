@@ -4,5 +4,5 @@ public interface LogicStoreRepository {
 
     LogicStore find(LogicStore.LogicStoreId logicStoreId);
 
-    void save(LogicStore store);
+    LogicStore.LogicStoreId save(LogicStore store);
 }

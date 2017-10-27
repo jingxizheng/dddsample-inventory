@@ -49,6 +49,7 @@ public class PhysicalStore implements Entity<PhysicalStore> {
                 }
             }
         }
+        warehouseInfo.addUsedCapacity(pendingGoodsList.stream().mapToInt(Goods::getQty).sum());
     }
 
     public void outStore(List<Goods> pendingGoodsList) {
@@ -62,6 +63,7 @@ public class PhysicalStore implements Entity<PhysicalStore> {
                 }
             }
         }
+        warehouseInfo.reduceUsedCapacity(pendingGoodsList.stream().mapToInt(Goods::getQty).sum());
     }
 
     @Override

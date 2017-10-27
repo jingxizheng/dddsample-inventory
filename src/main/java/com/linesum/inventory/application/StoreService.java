@@ -1,7 +1,9 @@
 package com.linesum.inventory.application;
 
-import com.linesum.inventory.domain.model.order.LogicOrder;
-import com.linesum.inventory.domain.model.store.*;
+import com.linesum.inventory.domain.model.order.Contact;
+import com.linesum.inventory.domain.model.order.Order;
+import com.linesum.inventory.domain.model.store.Goods;
+import com.linesum.inventory.domain.model.store.LogicStore;
 
 import java.util.List;
 
@@ -10,17 +12,17 @@ public interface StoreService {
     /**
      * 商品入库
      */
-    LogicOrder transferInLogicStore(List<SkuCode> skuCodeList, WarehouseId warehouseId);
+    Order transferInLogicStore(List<Goods> goodsList, LogicStore.LogicStoreId logicStoreId, Contact sender);
 
     /**
      * 商品出库
      */
-    LogicOrder transferOutLogicStore(List<SkuCode> skuCodeList, WarehouseId warehouseId);
+    Order transferOutLogicStore(List<Goods> goodsList, LogicStore.LogicStoreId logicStoreId, Contact acceptor);
 
     /**
      * 库存切割
      */
-    LogicOrder transferLogicStore(List<SkuCode> skuCodeList, WarehouseId from, WarehouseId to);
+    Order transferLogicStore(List<Goods> goodsList, LogicStore.LogicStoreId from, LogicStore.LogicStoreId to);
 
 
 }

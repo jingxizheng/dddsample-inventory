@@ -1,7 +1,7 @@
 package com.linesum.inventory.domain.model.store;
 
 import com.linesum.inventory.domain.model.order.Contact;
-import com.linesum.inventory.domain.model.order.LogicOrder;
+import com.linesum.inventory.domain.model.order.Order;
 import com.linesum.inventory.domain.model.order.OrderId;
 import com.linesum.inventory.domain.shared.Entity;
 import com.linesum.inventory.domain.shared.ValueObject;
@@ -23,10 +23,16 @@ public class LogicStore implements Entity<LogicStore> {
 
     private PhysicalStore physicalStore; // 所属物理库存
 
-    public LogicOrder inStore(List<Goods> pendingGoodsList, OrderId orderId, Contact sender) {
+    public LogicStore(LogicStoreId logicStoreId, List<Goods> goodsList, PhysicalStore physicalStore) {
+        this.logicStoreId = logicStoreId;
+        this.goodsList = goodsList;
+        this.physicalStore = physicalStore;
+    }
+
+    public Order inStore(List<Goods> pendingGoodsList, OrderId orderId, Contact sender) {
         this.physicalStore.inStore(pendingGoodsList);
         add(pendingGoodsList);
-        return new LogicOrder(
+        return new Order(
                 orderId,
                 this.physicalStore.getWarehouseInfo().getContact(),
                 sender,
@@ -44,10 +50,10 @@ public class LogicStore implements Entity<LogicStore> {
         }
     }
 
-    public LogicOrder outStore(List<Goods> pendingGoodsList, OrderId orderId, Contact acceptor) {
+    public Order outStore(List<Goods> pendingGoodsList, OrderId orderId, Contact acceptor) {
         this.physicalStore.outStore(pendingGoodsList);
         reduce(pendingGoodsList);
-        return new LogicOrder(
+        return new Order(
                 orderId,
                 acceptor,
                 this.physicalStore.getWarehouseInfo().getContact(),
@@ -65,13 +71,13 @@ public class LogicStore implements Entity<LogicStore> {
         }
     }
 
-    public LogicOrder transfer(List<Goods> pendingGoodsList, OrderId orderId, LogicStore from) throws TransferException {
+    public Order transfer(List<Goods> pendingGoodsList, OrderId orderId, LogicStore from) throws TransferException {
         if (!this.somePhysicalStoreAs(from)) {
             throw new TransferException(from.physicalStore.getWarehouseId(), this.physicalStore.getWarehouseId());
         }
         this.add(pendingGoodsList);
         from.reduce(pendingGoodsList);
-        return new LogicOrder(
+        return new Order(
                 orderId,
                 this.physicalStore.getWarehouseInfo().getContact(),
                 from.physicalStore.getWarehouseInfo().getContact(),

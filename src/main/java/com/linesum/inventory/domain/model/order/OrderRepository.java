@@ -2,13 +2,11 @@ package com.linesum.inventory.domain.model.order;
 
 import java.util.List;
 
-public interface OrderRepository<O extends AbstractOrder> {
+public interface OrderRepository {
 
-    O find(OrderId orderId);
+    Order find(OrderId orderId);
 
-    List<O> findAll();
+    List<Order> findAll();
 
-    void save(O order);
-
-    OrderId nextOrderId();
+    OrderId save(Order order);
 }

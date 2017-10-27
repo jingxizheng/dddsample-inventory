@@ -1,6 +1,6 @@
 package com.linesum.inventory.application;
 
-import com.linesum.inventory.domain.model.store.PhysicalStore;
+import com.linesum.inventory.domain.model.order.OrderId;
 
 /**
  * 应用事件
@@ -13,10 +13,10 @@ public interface ApplicationEvents {
     /**
      * 商品入库
      */
-    void transferInPhysicalStore(PhysicalStore physicalStore);
+    void transferInPhysicalStore(OrderId orderId);
 
     /**
      * 商品出库
      */
-    void transferOutPhysicalStore(PhysicalStore physicalStore);
+    void transferOutPhysicalStore(OrderId orderId);
 }
