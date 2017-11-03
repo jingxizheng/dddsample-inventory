@@ -1,6 +1,5 @@
 package com.linesum.inventory.domain.model.order;
 
-import com.google.common.base.Preconditions;
 import com.linesum.inventory.domain.shared.ValueObject;
 
 import java.util.Objects;

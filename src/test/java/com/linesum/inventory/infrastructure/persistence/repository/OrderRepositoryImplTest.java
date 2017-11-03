@@ -84,7 +84,6 @@ public class OrderRepositoryImplTest extends BaseJunitTestCase {
                 .isNotNull()
                 .isNotEmpty()
                 .first()
-                .hasFieldOrPropertyWithValue("skuCode", "sku_code")
                 .hasFieldOrPropertyWithValue("qty", 100)
                 .hasFieldOrPropertyWithValue("price", goodsPo.getPrice());
     }
