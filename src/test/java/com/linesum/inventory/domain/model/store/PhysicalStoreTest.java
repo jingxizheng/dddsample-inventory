@@ -17,7 +17,7 @@ public class PhysicalStoreTest {
 
     private PhysicalStore physicalStore;
 
-    private List<Goods> penddingGoodsList;
+    private List<Goods> pendingGoodsList;
 
     private SkuCode skuCode1 = new SkuCode("sku_code_1");
 
@@ -39,7 +39,7 @@ public class PhysicalStoreTest {
                 )
         );
 
-        penddingGoodsList = Lists.newArrayList(
+        pendingGoodsList = Lists.newArrayList(
                 new Goods(skuCode1, 50, new BigDecimal("100.00")),
                 new Goods(skuCode2, 50, new BigDecimal("200.00"))
         );
@@ -48,7 +48,7 @@ public class PhysicalStoreTest {
 
     @Test
     public void inStore() throws Exception {
-        physicalStore.inStore(penddingGoodsList);
+        physicalStore.inStore(pendingGoodsList);
 
         Assertions.assertThat(physicalStore.getGoodsList())
                 .extracting("skuCode", "qty", "price")
@@ -63,7 +63,7 @@ public class PhysicalStoreTest {
 
     @Test
     public void outStore() throws Exception {
-        physicalStore.outStore(penddingGoodsList);
+        physicalStore.outStore(pendingGoodsList);
 
         Assertions.assertThat(physicalStore.getGoodsList())
                 .extracting("skuCode", "qty", "price")

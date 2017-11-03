@@ -58,7 +58,7 @@ public class PhysicalStoreRepositoryImpl implements PhysicalStoreRepository {
                     GoodsPo goodsPo = goodsPoList.stream()
                             .filter(gPo -> Objects.equals(psgmPo.getGoodsId(), gPo.getId()))
                             .findFirst()
-                            .get(); // FIXME
+                            .get();
                     return new Goods(new SkuCode(goodsPo.getSkuCode()), psgmPo.getQty(), goodsPo.getPrice());
                 })
                 .collect(Collectors.toList());
@@ -79,7 +79,7 @@ public class PhysicalStoreRepositoryImpl implements PhysicalStoreRepository {
         Long warehouseId = physicalStore.getWarehouseId().getId();
         WarehouseInfo warehouseInfo = physicalStore.getWarehouseInfo();
         Contact contact = warehouseInfo.getContact();
-        Long contactId = contact.getCustomerId().getId();
+        Long contactId = contact.getContactId().getId();
         List<Goods> goodsList = physicalStore.getGoodsList();
 
 

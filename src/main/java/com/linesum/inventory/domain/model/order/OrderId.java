@@ -13,7 +13,6 @@ public class OrderId implements ValueObject<OrderId> {
     private Long id;
 
     public OrderId(Long id) {
-        Preconditions.checkNotNull(id, "id is required");
         this.id = id;
     }
 

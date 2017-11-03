@@ -12,8 +12,6 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 /**
  * Created by zhengjx on 2017/10/27.
  */
@@ -23,7 +21,7 @@ public class LogicStoreTest {
 
     private LogicStore logicStore;
 
-    private List<Goods> penddingGoodsList;
+    private List<Goods> pendingGoodsList;
 
     private SkuCode skuCode1 = new SkuCode("sku_code_1");
 
@@ -53,7 +51,7 @@ public class LogicStoreTest {
                 )
         );
 
-        penddingGoodsList = Lists.newArrayList(
+        pendingGoodsList = Lists.newArrayList(
                 new Goods(skuCode1, 50, new BigDecimal("100.00")),
                 new Goods(skuCode2, 50, new BigDecimal("200.00"))
         );
@@ -70,7 +68,7 @@ public class LogicStoreTest {
 
     @Test
     public void inStore() throws Exception {
-        Order order = logicStore.inStore(penddingGoodsList, orderId, sender);
+        Order order = logicStore.inStore(pendingGoodsList, orderId, sender);
 
         Assertions.assertThat(logicStore.getGoodsList())
                 .extracting("skuCode", "qty", "price")
@@ -89,12 +87,22 @@ public class LogicStoreTest {
         Assertions.assertThat(logicStore.getPhysicalStore().getWarehouseInfo().getUsedCapacity())
                 .isEqualTo(300);
 
-        // TODO assert order
+        Assertions.assertThat(order.getSendDate())
+                .isNotNull();
+        Assertions.assertThat(order.getSender())
+                .isNotNull()
+                .hasNoNullFieldsOrProperties();
+        Assertions.assertThat(order.getAcceptor())
+                .isNotNull()
+                .hasNoNullFieldsOrProperties();
+        Assertions.assertThat(order.getOrderGoodsList())
+                .isNotNull()
+                .isNotEmpty();
     }
 
     @Test
     public void outStore() throws Exception {
-        Order order = logicStore.outStore(penddingGoodsList, orderId, acceptor);
+        Order order = logicStore.outStore(pendingGoodsList, orderId, acceptor);
 
         Assertions.assertThat(logicStore.getGoodsList())
                 .extracting("skuCode", "qty", "price")
@@ -113,7 +121,17 @@ public class LogicStoreTest {
         Assertions.assertThat(logicStore.getPhysicalStore().getWarehouseInfo().getUsedCapacity())
                 .isEqualTo(100);
 
-        // TODO assert order
+        Assertions.assertThat(order.getSendDate())
+                .isNotNull();
+        Assertions.assertThat(order.getSender())
+                .isNotNull()
+                .hasNoNullFieldsOrProperties();
+        Assertions.assertThat(order.getAcceptor())
+                .isNotNull()
+                .hasNoNullFieldsOrProperties();
+        Assertions.assertThat(order.getOrderGoodsList())
+                .isNotNull()
+                .isNotEmpty();
     }
 
     @Test

@@ -1,7 +1,5 @@
 package com.linesum.inventory.infrastructure.persistence.jpa.po;
 
-import com.linesum.inventory.domain.model.order.Contact;
-
 import javax.persistence.*;
 
 /**

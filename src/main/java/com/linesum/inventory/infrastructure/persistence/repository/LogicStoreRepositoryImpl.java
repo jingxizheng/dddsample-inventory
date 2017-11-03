@@ -45,7 +45,7 @@ public class LogicStoreRepositoryImpl implements LogicStoreRepository {
                     GoodsPo goodsPo = goodsPoList.stream()
                             .filter(gPo -> Objects.equals(lsgmPo.getGoodsId(), gPo.getId()))
                             .findFirst()
-                            .get(); // FIXME
+                            .get();
                     return new Goods(new SkuCode(goodsPo.getSkuCode()), lsgmPo.getQty(), goodsPo.getPrice());
                 })
                 .collect(Collectors.toList());

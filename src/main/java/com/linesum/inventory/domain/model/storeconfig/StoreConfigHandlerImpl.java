@@ -1,10 +1,9 @@
 package com.linesum.inventory.domain.model.storeconfig;
 
 import com.linesum.inventory.domain.model.store.Goods;
-import com.linesum.inventory.domain.model.store.SalesStore;
-import com.linesum.inventory.domain.model.store.WarehouseInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.assertj.core.util.Lists;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -16,10 +15,29 @@ public class StoreConfigHandlerImpl {
 
     private final static Log LOGGER = LogFactory.getLog(StoreConfigHandlerImpl.class);
 
+    private List<Goods> goodsListSeed;
+
+    private List<StoreConfigHandler> storeConfigHandlerList = Lists.newArrayList(
+            new SalesRatioConfigHandler()
+            /* new SalesOtherConfigHandler()... */
+    );
+
+    public List<Goods> execute(List<StoreConfig> storeConfigList, List<Goods> goodsListSeed) {
+        this.goodsListSeed = goodsListSeed;
+
+        storeConfigList.forEach(config ->
+                storeConfigHandlerList.stream()
+                        .filter(handler -> handler.sameEventAs(config))
+                        .findFirst() // return an optional
+                        .ifPresent(targetHandler -> targetHandler.handleConfig(config)));
+
+        return this.goodsListSeed;
+    }
+
     /**
      * 销售库存占比
      */
-    public class SalesRatioConfigHandler implements StoreConfigHandler {
+    public class SalesRatioConfigHandler extends StoreConfigHandlerImpl implements StoreConfigHandler {
 
         @Override
         public void handleConfig(StoreConfig storeConfig) {
@@ -27,9 +45,8 @@ public class StoreConfigHandlerImpl {
                 LOGGER.error("sales ratio config not match");
             } else {
                 StoreConfig.SalesRatioConfig salesRatioConfig = (StoreConfig.SalesRatioConfig) storeConfig;
-                List<Goods> goodsList = salesRatioConfig.getGoodsList();
                 BigDecimal ratio = salesRatioConfig.getRatio();
-                goodsList.forEach(goods -> goods.multiply(ratio));
+                super.goodsListSeed.forEach(goods -> goods.multiply(ratio));
             }
         }
 
@@ -39,26 +56,6 @@ public class StoreConfigHandlerImpl {
         }
     }
 
-    /**
-     * 锁库库存占比
-     */
-    public class LockRatioConfigHandler implements StoreConfigHandler {
+    /* public class SalesOtherConfigHandler extends StoreConfigHandlerImpl implements StoreConfigHandler ... */
 
-        @Override
-        public void handleConfig(StoreConfig storeConfig) {
-            if (!this.sameEventAs(storeConfig)) {
-                LOGGER.error("lock ratio config not match");
-            } else {
-                StoreConfig.LockRatioConfig lockRatioConfig = (StoreConfig.LockRatioConfig) storeConfig;
-                List<Goods> goodsList = lockRatioConfig.getGoodsList();
-                BigDecimal ratio = lockRatioConfig.getRatio();
-                goodsList.forEach(goods -> goods.multiply(ratio));
-            }
-        }
-
-        @Override
-        public boolean sameEventAs(StoreConfig other) {
-            return other instanceof StoreConfig.LockRatioConfig;
-        }
-    }
 }

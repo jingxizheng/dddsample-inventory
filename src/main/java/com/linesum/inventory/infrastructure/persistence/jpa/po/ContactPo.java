@@ -19,9 +19,6 @@ public class ContactPo {
 
     private String telephone;
 
-    public ContactPo() {
-    }
-
     public ContactPo(Long id, String name, String address, String telephone) {
         this.id = id;
         this.name = name;

@@ -2,10 +2,7 @@ package com.linesum.inventory.application.impl;
 
 import com.linesum.inventory.application.ApplicationEvents;
 import com.linesum.inventory.application.StoreService;
-import com.linesum.inventory.domain.model.order.Contact;
-import com.linesum.inventory.domain.model.order.Order;
-import com.linesum.inventory.domain.model.order.OrderId;
-import com.linesum.inventory.domain.model.order.OrderRepository;
+import com.linesum.inventory.domain.model.order.*;
 import com.linesum.inventory.domain.model.store.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,29 +23,34 @@ public class StoreServiceImpl implements StoreService {
     @Autowired
     private ApplicationEvents applicationEvents;
 
+    @Autowired
+    private ContactRepository contactRepository;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Order transferInLogicStore(List<Goods> goodsList,
+    public OrderId transferInLogicStore(List<Goods> goodsList,
                                            LogicStore.LogicStoreId logicStoreId,
-                                           Contact sender) {
+                                           ContactId senderId) {
         LogicStore logicStore = logicStoreRepository.find(logicStoreId);
         PhysicalStore physicalStore = physicalStoreRepository.find(logicStore.getPhysicalStore().getPhysicalStoreId());
         logicStore = new LogicStore(
                 logicStore.getLogicStoreId(),
                 logicStore.getGoodsList(),
                 physicalStore);
+
+        Contact sender = contactRepository.find(senderId);
 
         Order order = logicStore.inStore(goodsList, null, sender);
         OrderId orderId = orderRepository.save(order);
         applicationEvents.transferInPhysicalStore(orderId);
-        return order.addOrderId(orderId);
+        return orderId;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Order transferOutLogicStore(List<Goods> goodsList,
+    public OrderId transferOutLogicStore(List<Goods> goodsList,
                                             LogicStore.LogicStoreId logicStoreId,
-                                            Contact acceptor) {
+                                            ContactId acceptorId) {
         LogicStore logicStore = logicStoreRepository.find(logicStoreId);
         PhysicalStore physicalStore = physicalStoreRepository.find(logicStore.getPhysicalStore().getPhysicalStoreId());
         logicStore = new LogicStore(
@@ -56,15 +58,17 @@ public class StoreServiceImpl implements StoreService {
                 logicStore.getGoodsList(),
                 physicalStore);
 
+        Contact acceptor = contactRepository.find(acceptorId);
+
         Order order = logicStore.outStore(goodsList, null, acceptor);
         OrderId orderId = orderRepository.save(order);
         applicationEvents.transferOutPhysicalStore(orderId);
-        return order.addOrderId(orderId);
+        return orderId;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Order transferLogicStore(List<Goods> goodsList,
+    public OrderId transferLogicStore(List<Goods> goodsList,
                                          LogicStore.LogicStoreId from,
                                          LogicStore.LogicStoreId to) {
         LogicStore logicStoreFrom = logicStoreRepository.find(from);
@@ -80,8 +84,15 @@ public class StoreServiceImpl implements StoreService {
                 logicStoreTo.getLogicStoreId(),
                 logicStoreTo.getGoodsList(),
                 physicalStoreTo);
+        Order order = logicStoreTo.transfer(goodsList, null, logicStoreFrom);
+        return orderRepository.save(order);
+    }
 
-        return logicStoreTo.transfer(goodsList, null, logicStoreFrom);
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public SalesStore findSalesStore(SalesStore.SalesStoreId salesStoreId) {
+        // TODO
+        return null;
     }
 
 }

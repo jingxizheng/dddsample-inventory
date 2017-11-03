@@ -8,7 +8,7 @@ import com.linesum.inventory.domain.shared.Entity;
  */
 public class Contact implements Entity<Contact> {
 
-    private ContactId customerId;
+    private ContactId contactId;
 
     private String name;
 
@@ -16,12 +16,12 @@ public class Contact implements Entity<Contact> {
 
     private String telephone;
 
-    public Contact(ContactId customerId, String name, String address, String telephone) {
-        Preconditions.checkNotNull(customerId, "customerId is required");
+    public Contact(ContactId contactId, String name, String address, String telephone) {
+        Preconditions.checkNotNull(contactId, "contactId is required");
         Preconditions.checkNotNull(name, "name is required");
         Preconditions.checkNotNull(address, "address is required");
         Preconditions.checkNotNull(telephone, "telephone is required");
-        this.customerId = customerId;
+        this.contactId = contactId;
         this.name = name;
         this.address = address;
         this.telephone = telephone;
@@ -29,11 +29,11 @@ public class Contact implements Entity<Contact> {
 
     @Override
     public boolean sameIdentityAs(Contact other) {
-        return other != null && this.customerId.sameValueAs(other.customerId);
+        return other != null && this.contactId.sameValueAs(other.contactId);
     }
 
-    public ContactId getCustomerId() {
-        return customerId;
+    public ContactId getContactId() {
+        return contactId;
     }
 
     public String getName() {
