@@ -26,11 +26,6 @@ public class Order implements Entity<Order> {
     private Date acceptDate; // 收货日期
 
     public Order(OrderId orderId, Contact acceptor, Contact sender, List<Goods> goodsList, Date sendDate) {
-        Preconditions.checkNotNull(acceptor, "acceptor is required");
-        Preconditions.checkNotNull(orderId, "orderId is required");
-        Preconditions.checkNotNull(sender, "sender is required");
-        Preconditions.checkNotNull(goodsList, "orderGoodsList is required");
-        Preconditions.checkNotNull(sendDate, "sendDate is required");
         this.orderId = orderId;
         this.acceptor = acceptor;
         this.sender = sender;

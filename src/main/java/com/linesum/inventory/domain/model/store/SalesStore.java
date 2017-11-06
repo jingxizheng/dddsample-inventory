@@ -1,11 +1,15 @@
 package com.linesum.inventory.domain.model.store;
 
+import com.google.common.collect.Lists;
 import com.linesum.inventory.domain.model.storeconfig.StoreConfig;
-import com.linesum.inventory.domain.model.storeconfig.StoreConfigHandlerImpl;
+import com.linesum.inventory.domain.model.storeconfig.StoreConfigExecutor;
 import com.linesum.inventory.domain.shared.Entity;
 import com.linesum.inventory.domain.shared.ValueObject;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * 渠道销售库存
@@ -24,7 +28,7 @@ public class SalesStore implements Entity<SalesStore> {
 
     private List<StoreConfig> storeConfigList; // 附加的库存规则
 
-    private static final StoreConfigHandlerImpl storeConfigHandler = new StoreConfigHandlerImpl();
+    private static final StoreConfigExecutor EXECUTOR = new StoreConfigExecutor();
 
     public SalesStore(SalesStoreId salesStoreId,
                       List<LogicStore> logicStoreList,
@@ -41,12 +45,12 @@ public class SalesStore implements Entity<SalesStore> {
      * 执行库存规则
      */
     private List<Goods> executeStoreConfig() {
-        List<Goods> goodsListSeed = Collections.EMPTY_LIST;
+        List<Goods> goodsListSeed = Lists.newArrayList();
         this.logicStoreList.forEach(logicStore ->
                 logicStore.getGoodsList().forEach(goods ->
                         this.addGoods(goodsListSeed, goods)));
 
-        return storeConfigHandler.execute(this.storeConfigList, goodsListSeed);
+        return EXECUTOR.execute(this.storeConfigList, goodsListSeed);
     }
 
     private void addGoods(List<Goods> goodsList, Goods target) {

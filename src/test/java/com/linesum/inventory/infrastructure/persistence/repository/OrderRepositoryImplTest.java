@@ -3,7 +3,7 @@ package com.linesum.inventory.infrastructure.persistence.repository;
 import com.linesum.inventory.domain.model.order.*;
 import com.linesum.inventory.domain.model.store.Goods;
 import com.linesum.inventory.domain.model.store.SkuCode;
-import com.linesum.inventory.infrastructure.persistence.BaseJunitTestCase;
+import com.linesum.inventory.BaseJunitTestCase;
 import com.linesum.inventory.infrastructure.persistence.jpa.ContactRepositoryJpa;
 import com.linesum.inventory.infrastructure.persistence.jpa.GoodsRepositoryJpa;
 import com.linesum.inventory.infrastructure.persistence.jpa.po.ContactPo;

@@ -1,5 +1,6 @@
 package com.linesum.inventory.infrastructure.persistence.repository;
 
+import com.google.common.collect.Lists;
 import com.linesum.inventory.domain.model.store.*;
 import com.linesum.inventory.domain.model.storeconfig.StoreConfig;
 import com.linesum.inventory.infrastructure.persistence.jpa.ChannelRepositoryJpa;
@@ -13,7 +14,6 @@ import com.linesum.inventory.infrastructure.persistence.jpa.po.SalesStorePo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,7 +50,7 @@ public class SalesStoreRepositoryImpl implements SalesStoreRepository {
                 .collect(Collectors.toList());
 
 
-        List<StoreConfig> storeConfigList = Collections.EMPTY_LIST;
+        List<StoreConfig> storeConfigList = Lists.newArrayList();
         SalesRatioConfigPo salesRatioConfigPo = salesRatioConfigRepositoryJpa.findFirstBySalesStoreId(salesStoreId.getId());
         if (salesRatioConfigPo != null) {
             storeConfigList.add(new StoreConfig.SalesRatioConfig(salesRatioConfigPo.getRatio()));
@@ -66,6 +66,12 @@ public class SalesStoreRepositoryImpl implements SalesStoreRepository {
                         new Channel.ChannelId(channelPo.getParentChannelId())
                         ),
                 storeConfigList);
+    }
+
+    @Override
+    public SalesStore.SalesStoreId save(SalesStore salesStore) {
+        // TODO
+        return null;
     }
 
 }

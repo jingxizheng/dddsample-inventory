@@ -26,7 +26,7 @@ public interface StoreService {
     OrderId transferLogicStore(List<Goods> goodsList, LogicStore.LogicStoreId from, LogicStore.LogicStoreId to);
 
     /**
-     * 查询
+     * 查询渠道销售库存
      */
     SalesStore findSalesStore(SalesStore.SalesStoreId salesStoreId);
 }

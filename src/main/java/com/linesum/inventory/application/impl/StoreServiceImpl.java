@@ -4,27 +4,36 @@ import com.linesum.inventory.application.ApplicationEvents;
 import com.linesum.inventory.application.StoreService;
 import com.linesum.inventory.domain.model.order.*;
 import com.linesum.inventory.domain.model.store.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 
+@Service
 public class StoreServiceImpl implements StoreService {
 
-    @Autowired
+    @Resource
     private PhysicalStoreRepository physicalStoreRepository;
 
-    @Autowired
+    @Resource
     private LogicStoreRepository logicStoreRepository;
 
-    @Autowired
+    @Resource
     private OrderRepository orderRepository;
 
-    @Autowired
+    @Resource
     private ApplicationEvents applicationEvents;
 
-    @Autowired
+    @Resource
     private ContactRepository contactRepository;
+
+    @Resource
+    private SalesStoreRepository salesStoreRepositoryImpl;
+
+    @Resource
+    private SalesStoreRepository salesStoreRepositoryRedisImpl;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -91,8 +100,14 @@ public class StoreServiceImpl implements StoreService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public SalesStore findSalesStore(SalesStore.SalesStoreId salesStoreId) {
-        // TODO
-        return null;
+        Optional<SalesStore> salesStoreOptional = Optional.ofNullable(salesStoreRepositoryRedisImpl.find(salesStoreId));
+        if (salesStoreOptional.isPresent()) {
+            return salesStoreOptional.get();
+        } else {
+            SalesStore salesStore = salesStoreRepositoryImpl.find(salesStoreId);
+            salesStoreRepositoryRedisImpl.save(salesStore);
+            return salesStore;
+        }
     }
 
 }

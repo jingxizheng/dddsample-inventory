@@ -6,4 +6,6 @@ package com.linesum.inventory.domain.model.store;
 public interface SalesStoreRepository {
 
     SalesStore find(SalesStore.SalesStoreId salesStoreId);
+
+    SalesStore.SalesStoreId save(SalesStore salesStore);
 }

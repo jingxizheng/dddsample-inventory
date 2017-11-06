@@ -1,4 +1,4 @@
-package com.linesum.inventory.infrastructure.persistence;
+package com.linesum.inventory;
 
 import com.linesum.inventory.Application;
 import org.junit.runner.RunWith;

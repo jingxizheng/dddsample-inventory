@@ -3,7 +3,7 @@ package com.linesum.inventory.infrastructure.persistence.repository;
 import com.linesum.inventory.domain.model.order.Contact;
 import com.linesum.inventory.domain.model.order.ContactId;
 import com.linesum.inventory.domain.model.store.*;
-import com.linesum.inventory.infrastructure.persistence.BaseJunitTestCase;
+import com.linesum.inventory.BaseJunitTestCase;
 import com.linesum.inventory.infrastructure.persistence.jpa.GoodsRepositoryJpa;
 import com.linesum.inventory.infrastructure.persistence.jpa.po.GoodsPo;
 import org.assertj.core.api.Assertions;
@@ -14,8 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.math.BigDecimal;
 import java.util.UUID;
-
-import static org.junit.Assert.*;
 
 /**
  * Created by zhengjx on 2017/10/27.

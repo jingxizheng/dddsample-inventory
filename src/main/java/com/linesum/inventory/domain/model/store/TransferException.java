@@ -1,5 +1,8 @@
 package com.linesum.inventory.domain.model.store;
 
+/**
+ * Created by zhengjx on 2017/11/6.
+ */
 public class TransferException extends RuntimeException {
 
     private final WarehouseId from;
