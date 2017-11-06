@@ -4,6 +4,7 @@ import com.linesum.inventory.domain.model.order.Contact;
 import com.linesum.inventory.domain.model.order.ContactId;
 import com.linesum.inventory.domain.model.order.Order;
 import com.linesum.inventory.domain.model.order.OrderId;
+import java.util.ArrayList;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
@@ -136,7 +137,35 @@ public class LogicStoreTest {
 
     @Test
     public void transfer() throws Exception {
-        // TODO
+
+        ArrayList<Goods> transferPendingGoodsList = Lists.newArrayList(
+                new Goods(skuCode1, 20, new BigDecimal("100.00")),
+                new Goods(skuCode2, 20, new BigDecimal("200.00"))
+        );
+
+        LogicStore logicStoreFrom = new LogicStore(
+                new LogicStore.LogicStoreId(2L),
+                Lists.newArrayList(
+                        new Goods(skuCode1, 30, new BigDecimal("100.00")),
+                        new Goods(skuCode2, 30, new BigDecimal("200.00"))
+                ),
+                physicalStore
+        );
+
+        Order order = logicStore.transfer(transferPendingGoodsList, new OrderId(1L), logicStoreFrom);
+
+        // assert transfer in logic store
+        Assertions.assertThat(logicStore.getGoodsList())
+                .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
+                .contains(Assertions.tuple(skuCode1.getCode(), 90, new BigDecimal("100.00")),
+                        Assertions.tuple(skuCode2.getCode(), 90, new BigDecimal("200.00")));
+
+        // assert transfer out logic store
+        Assertions.assertThat(logicStoreFrom.getGoodsList())
+                .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
+                .contains(Assertions.tuple(skuCode1.getCode(), 10, new BigDecimal("100.00")),
+                        Assertions.tuple(skuCode2.getCode(), 10, new BigDecimal("200.00")));
+
     }
 
 }

@@ -70,7 +70,7 @@ public class SalesStoreRepositoryImpl implements SalesStoreRepository {
 
     @Override
     public SalesStore.SalesStoreId save(SalesStore salesStore) {
-        // TODO
+        // no implementation
         return null;
     }
 

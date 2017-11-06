@@ -165,6 +165,61 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
 
     @Test
     public void transferOutLogicStore() throws Exception {
+        OrderId orderId = storeService.transferOutLogicStore(
+                Lists.newArrayList(
+                        new Goods(skuCode1, 50, new BigDecimal("100.00")),
+                        new Goods(skuCode2, 100, new BigDecimal("200.00"))),
+                logicStoreId,
+                contactId2);
+
+        assertThat(orderId)
+                .isNotNull();
+
+        // assert logic store
+        ArgumentCaptor<LogicStore> logicStoreArgumentCaptor = ArgumentCaptor.forClass(LogicStore.class);
+        verify(logicStoreRepository).save(logicStoreArgumentCaptor.capture());
+        LogicStore logicStore = logicStoreArgumentCaptor.getValue();
+
+        assertThat(logicStore.getGoodsList())
+                .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
+                .contains(tuple(skuCode1.getCode(), 50, new BigDecimal("100.00")),
+                        tuple(skuCode2.getCode(), 100, new BigDecimal("200.00")));
+
+        // assert physical store
+        ArgumentCaptor<PhysicalStore> physicalStoreArgumentCaptor = ArgumentCaptor.forClass(PhysicalStore.class);
+        verify(physicalStoreRepository).save(physicalStoreArgumentCaptor.capture());
+        PhysicalStore physicalStore = physicalStoreArgumentCaptor.getValue();
+
+        assertThat(physicalStore.getWarehouseInfo().getUsedCapacity())
+                .isEqualTo(150);
+        assertThat(physicalStore.getGoodsList())
+                .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
+                .contains(tuple(skuCode1.getCode(), 50, new BigDecimal("100.00")),
+                        tuple(skuCode2.getCode(), 100, new BigDecimal("200.00")));
+
+        // assert order
+        ArgumentCaptor<Order> orderArgumentCaptor = ArgumentCaptor.forClass(Order.class);
+        verify(orderRepository).save(orderArgumentCaptor.capture());
+        Order order = orderArgumentCaptor.getValue();
+
+        assertThat(order)
+                .isNotNull()
+                .hasNoNullFieldsOrPropertiesExcept("orderId", "acceptDate");
+        assertThat(order.getSender())
+                .extracting("contactId", "name", "address", "telephone")
+                .contains(contactId1, "contact_name_1", "contact_addr_1", "contact_phone_1");
+        assertThat(order.getAcceptor())
+                .extracting("contactId", "name", "address", "telephone")
+                .contains(contactId2, "contact_name_2", "contact_addr_2", "contact_phone_2");
+        assertThat(order.getOrderGoodsList())
+                .isNotNull()
+                .isNotEmpty()
+                .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
+                .contains(tuple(skuCode1.getCode(), 50, new BigDecimal("100.00")),
+                        tuple(skuCode2.getCode(), 100, new BigDecimal("200.00")));
+
+        // assert event publish
+        verify(applicationEvents, times(1)).transferOutPhysicalStore(orderId);
     }
 
     @Test

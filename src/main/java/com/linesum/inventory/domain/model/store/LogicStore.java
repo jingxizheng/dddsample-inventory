@@ -71,6 +71,9 @@ public class LogicStore implements Entity<LogicStore> {
         }
     }
 
+    /**
+     * SUGGEST better implement in domain service
+     */
     public Order transfer(List<Goods> pendingGoodsList, OrderId orderId, LogicStore from) throws TransferException {
         if (!this.somePhysicalStoreAs(from)) {
             throw new TransferException(from.physicalStore.getWarehouseId(), this.physicalStore.getWarehouseId());
