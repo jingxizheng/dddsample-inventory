@@ -5,15 +5,20 @@ import com.linesum.inventory.application.ApplicationEvents;
 import com.linesum.inventory.application.StoreService;
 import com.linesum.inventory.domain.model.order.*;
 import com.linesum.inventory.domain.model.store.*;
-import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.ArgumentCaptor;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
 import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.mockito.Mockito.*;
 
 /**
  * Created by zhengjx on 2017/11/6.
@@ -57,7 +62,8 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        Mockito.when(logicStoreRepository.find(logicStoreId))
+        // mock logicStoreRepository.find
+        when(logicStoreRepository.find(logicStoreId))
                 .thenReturn(new LogicStore(
                         logicStoreId,
                         Lists.newArrayList(
@@ -66,7 +72,8 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
                         new PhysicalStore(physicalStoreId, null, null, null)
                 ));
 
-        Mockito.when(physicalStoreRepository.find(physicalStoreId))
+        // mock physicalStoreRepository.find
+        when(physicalStoreRepository.find(physicalStoreId))
                 .thenReturn(new PhysicalStore(
                         physicalStoreId,
                         warehouseId,
@@ -79,13 +86,22 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
                                 new Goods(skuCode2, 200, new BigDecimal("200.00")))
                 ));
 
-        Mockito.when(contactRepository.find(contactId2))
+        // mock contactRepository.find
+        when(contactRepository.find(contactId2))
                 .thenReturn(new Contact(contactId2, "contact_name_2", "contact_addr_2", "contact_phone_2"));
 
-        Mockito.when(orderRepository.save(Mockito.any(Order.class)))
+        // mock logicStoreRepository.save
+        when(logicStoreRepository.save(any(LogicStore.class))).thenReturn(logicStoreId);
+
+        // mock physicalStoreRepository.save
+        when(physicalStoreRepository.save(any(PhysicalStore.class))).thenReturn(physicalStoreId);
+
+        // mock orderRepository.save
+        when(orderRepository.save(any(Order.class)))
                 .thenReturn(orderId);
 
-        Mockito.doNothing().when(applicationEvents).transferInPhysicalStore(orderId);
+        // mock applicationEvents.transferInPhysicalStore
+        doNothing().when(applicationEvents).transferInPhysicalStore(orderId);
     }
 
     @Test
@@ -97,36 +113,54 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
                 logicStoreId,
                 contactId2);
 
-        Assertions.assertThat(orderId).isNotNull();
+        assertThat(orderId)
+                .isNotNull();
 
+        // assert logic store
+        ArgumentCaptor<LogicStore> logicStoreArgumentCaptor = ArgumentCaptor.forClass(LogicStore.class);
+        verify(logicStoreRepository).save(logicStoreArgumentCaptor.capture());
+        LogicStore logicStore = logicStoreArgumentCaptor.getValue();
+
+        assertThat(logicStore.getGoodsList())
+                .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
+                .contains(tuple(skuCode1.getCode(), 200, new BigDecimal("100.00")),
+                        tuple(skuCode2.getCode(), 400, new BigDecimal("200.00")));
+
+        // assert physical store
+        ArgumentCaptor<PhysicalStore> physicalStoreArgumentCaptor = ArgumentCaptor.forClass(PhysicalStore.class);
+        verify(physicalStoreRepository).save(physicalStoreArgumentCaptor.capture());
+        PhysicalStore physicalStore = physicalStoreArgumentCaptor.getValue();
+
+        assertThat(physicalStore.getWarehouseInfo().getUsedCapacity())
+                .isEqualTo(600);
+        assertThat(physicalStore.getGoodsList())
+                .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
+                .contains(tuple(skuCode1.getCode(), 200, new BigDecimal("100.00")),
+                        tuple(skuCode2.getCode(), 400, new BigDecimal("200.00")));
+
+        // assert order
         ArgumentCaptor<Order> orderArgumentCaptor = ArgumentCaptor.forClass(Order.class);
-        Mockito.verify(orderRepository).save(orderArgumentCaptor.capture());
+        verify(orderRepository).save(orderArgumentCaptor.capture());
         Order order = orderArgumentCaptor.getValue();
 
-        Assertions.assertThat(order)
+        assertThat(order)
                 .isNotNull()
                 .hasNoNullFieldsOrPropertiesExcept("orderId", "acceptDate");
-
-        Assertions.assertThat(order.getAcceptor())
-                .hasFieldOrPropertyWithValue("contactId", contactId1)
-                .hasFieldOrPropertyWithValue("name", "contact_name_1")
-                .hasFieldOrPropertyWithValue("address", "contact_addr_1")
-                .hasFieldOrPropertyWithValue("telephone", "contact_phone_1");
-
-        Assertions.assertThat(order.getSender())
-                .hasFieldOrPropertyWithValue("contactId", contactId2)
-                .hasFieldOrPropertyWithValue("name", "contact_name_2")
-                .hasFieldOrPropertyWithValue("address", "contact_addr_2")
-                .hasFieldOrPropertyWithValue("telephone", "contact_phone_2");
-
-        Assertions.assertThat(order.getOrderGoodsList())
+        assertThat(order.getAcceptor())
+                .extracting("contactId", "name", "address", "telephone")
+                .contains(contactId1, "contact_name_1", "contact_addr_1", "contact_phone_1");
+        assertThat(order.getSender())
+                .extracting("contactId", "name", "address", "telephone")
+                .contains(contactId2, "contact_name_2", "contact_addr_2", "contact_phone_2");
+        assertThat(order.getOrderGoodsList())
                 .isNotNull()
                 .isNotEmpty()
                 .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
-                .contains(Assertions.tuple(skuCode1.getCode(), 100, new BigDecimal("100.00")),
-                        Assertions.tuple(skuCode2.getCode(), 200, new BigDecimal("200.00")));
+                .contains(tuple(skuCode1.getCode(), 100, new BigDecimal("100.00")),
+                        tuple(skuCode2.getCode(), 200, new BigDecimal("200.00")));
 
-        Mockito.verify(applicationEvents, Mockito.times(1)).transferInPhysicalStore(orderId);
+        // assert event publish
+        verify(applicationEvents, times(1)).transferInPhysicalStore(orderId);
     }
 
     @Test

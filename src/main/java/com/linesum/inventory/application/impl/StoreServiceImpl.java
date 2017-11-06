@@ -50,6 +50,10 @@ public class StoreServiceImpl implements StoreService {
         Contact sender = contactRepository.find(senderId);
 
         Order order = logicStore.inStore(goodsList, null, sender);
+
+        logicStoreRepository.save(logicStore);
+        physicalStoreRepository.save(physicalStore);
+
         OrderId orderId = orderRepository.save(order);
         applicationEvents.transferInPhysicalStore(orderId);
         return orderId;
@@ -70,6 +74,8 @@ public class StoreServiceImpl implements StoreService {
         Contact acceptor = contactRepository.find(acceptorId);
 
         Order order = logicStore.outStore(goodsList, null, acceptor);
+        logicStoreRepository.save(logicStore);
+        physicalStoreRepository.save(physicalStore);
         OrderId orderId = orderRepository.save(order);
         applicationEvents.transferOutPhysicalStore(orderId);
         return orderId;
@@ -94,6 +100,13 @@ public class StoreServiceImpl implements StoreService {
                 logicStoreTo.getGoodsList(),
                 physicalStoreTo);
         Order order = logicStoreTo.transfer(goodsList, null, logicStoreFrom);
+
+        logicStoreRepository.save(logicStoreFrom);
+        physicalStoreRepository.save(physicalStoreFrom);
+
+        logicStoreRepository.save(logicStoreTo);
+        physicalStoreRepository.save(physicalStoreTo);
+
         return orderRepository.save(order);
     }
 
