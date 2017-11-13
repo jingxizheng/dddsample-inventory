@@ -15,21 +15,20 @@ import org.springframework.stereotype.Repository;
 public class SalesStoreRepositoryRedisImpl implements SalesStoreRepository {
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Override
     public SalesStore find(SalesStore.SalesStoreId salesStoreId) {
         ValueOperations valueOperations = redisTemplate.opsForValue();
-
-        Object o = valueOperations.get(salesStoreId);
-
-        return JSONObject.parseObject(o.toString(), SalesStore.class);
+        Object o = valueOperations.get(salesStoreId.idString());
+        JSONObject jsonObject = (JSONObject) o;
+        return JSONObject.parseObject(jsonObject.toJSONString(), SalesStore.class);
     }
 
     @Override
     public SalesStore.SalesStoreId save(SalesStore salesStore) {
         ValueOperations valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(salesStore.getSalesStoreId(), JSONObject.toJSONString(valueOperations));
+        valueOperations.set(salesStore.getSalesStoreId().idString(), salesStore);
         return salesStore.getSalesStoreId();
     }
 }

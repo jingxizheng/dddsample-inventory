@@ -1,6 +1,5 @@
 package com.linesum.inventory.domain.model.store;
 
-import com.google.common.base.Preconditions;
 import com.linesum.inventory.domain.shared.Entity;
 import com.linesum.inventory.domain.shared.ValueObject;
 
@@ -26,8 +25,20 @@ public class Channel implements Entity<Channel> {
         this.parentChannelId = parentChannelId;
     }
 
-    public boolean isShop() {
-        return Objects.equals(this.channelType, ChannelType.SHOP);
+    public ChannelId getChannelId() {
+        return channelId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ChannelType getChannelType() {
+        return channelType;
+    }
+
+    public ChannelId getParentChannelId() {
+        return parentChannelId;
     }
 
     @Override
@@ -43,6 +54,10 @@ public class Channel implements Entity<Channel> {
             this.id = id;
         }
 
+        public Long getId() {
+            return id;
+        }
+
         @Override
         public boolean sameValueAs(ChannelId other) {
             return other != null && Objects.equals(this.id, other.id);
@@ -51,6 +66,9 @@ public class Channel implements Entity<Channel> {
 
     public enum ChannelType implements ValueObject<ChannelType> {
         SUPPLIER, AGENT, SHOP;
+
+        ChannelType() {
+        }
 
         @Override
         public boolean sameValueAs(ChannelType other) {

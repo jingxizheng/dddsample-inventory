@@ -93,7 +93,7 @@ public class StoreServiceImpl implements StoreService {
                 logicStoreFrom.getGoodsList(),
                 physicalStoreFrom);
 
-        LogicStore logicStoreTo = logicStoreRepository.find(from);
+        LogicStore logicStoreTo = logicStoreRepository.find(to);
         PhysicalStore physicalStoreTo = physicalStoreRepository.find(logicStoreTo.getPhysicalStore().getPhysicalStoreId());
         logicStoreTo = new LogicStore(
                 logicStoreTo.getLogicStoreId(),
@@ -101,11 +101,9 @@ public class StoreServiceImpl implements StoreService {
                 physicalStoreTo);
         Order order = logicStoreTo.transfer(goodsList, null, logicStoreFrom);
 
-        logicStoreRepository.save(logicStoreFrom);
-        physicalStoreRepository.save(physicalStoreFrom);
-
         logicStoreRepository.save(logicStoreTo);
-        physicalStoreRepository.save(physicalStoreTo);
+
+        logicStoreRepository.save(logicStoreFrom);
 
         return orderRepository.save(order);
     }

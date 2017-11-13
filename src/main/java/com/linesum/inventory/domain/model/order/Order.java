@@ -33,6 +33,10 @@ public class Order implements Entity<Order> {
         this.sendDate = sendDate;
     }
 
+    public void accept() {
+        this.acceptDate = new Date();
+    }
+
     @Override
     public boolean sameIdentityAs(Order other) {
         return other != null && this.orderId.sameValueAs(other.orderId);
@@ -55,10 +59,10 @@ public class Order implements Entity<Order> {
     }
 
     public Date getSendDate() {
-        return sendDate;
+        return (Date) sendDate.clone();
     }
 
     public Date getAcceptDate() {
-        return acceptDate;
+        return (Date) acceptDate.clone();
     }
 }

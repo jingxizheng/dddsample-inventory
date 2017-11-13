@@ -31,6 +31,18 @@ public class SalesStore implements Entity<SalesStore> {
     private static final StoreConfigExecutor EXECUTOR = new StoreConfigExecutor();
 
     public SalesStore(SalesStoreId salesStoreId,
+                      List<Goods> goodsList,
+                      List<LogicStore> logicStoreList,
+                      Channel channel,
+                      List<StoreConfig> storeConfigList) {
+        this.salesStoreId = salesStoreId;
+        this.goodsList = goodsList;
+        this.logicStoreList = logicStoreList;
+        this.channel = channel;
+        this.storeConfigList = storeConfigList;
+    }
+
+    public SalesStore(SalesStoreId salesStoreId,
                       List<LogicStore> logicStoreList,
                       Channel channel,
                       List<StoreConfig> storeConfigList) {
@@ -60,7 +72,7 @@ public class SalesStore implements Entity<SalesStore> {
         if (goodsOptional.isPresent()) {
             goodsOptional.get().add(target.getQty());
         } else {
-            goodsList.add(target);
+            goodsList.add(new Goods(target.getSkuCode(), target.getQty(), target.getPrice()));
         }
     }
 
@@ -99,6 +111,10 @@ public class SalesStore implements Entity<SalesStore> {
 
         public Long getId() {
             return id;
+        }
+
+        public String idString() {
+            return this.id.toString();
         }
 
         @Override

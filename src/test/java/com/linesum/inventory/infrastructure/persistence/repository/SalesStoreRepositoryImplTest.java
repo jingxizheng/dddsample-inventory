@@ -109,6 +109,9 @@ public class SalesStoreRepositoryImplTest extends BaseJunitTestCase {
                 .first()
                 .hasFieldOrPropertyWithValue("qty", 50);
 
+        Assertions.assertThat(salesStore.getLogicStoreList().get(0).getGoodsList().get(0).getQty())
+                .isEqualTo(100);
+
     }
 
 }

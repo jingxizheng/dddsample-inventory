@@ -14,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -58,6 +59,8 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
 
     private final OrderId orderId = new OrderId(6L);
 
+    private final LogicStore.LogicStoreId logicStoreIdFrom = new LogicStore.LogicStoreId(7L);
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -72,6 +75,16 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
                         new PhysicalStore(physicalStoreId, null, null, null)
                 ));
 
+        // mock logicStoreRepository.find - from
+        when(logicStoreRepository.find(logicStoreIdFrom))
+                .thenReturn(new LogicStore(
+                        logicStoreIdFrom,
+                        Lists.newArrayList(
+                                new Goods(skuCode1, 100, new BigDecimal("100.00")),
+                                new Goods(skuCode2, 200, new BigDecimal("200.00"))),
+                        new PhysicalStore(physicalStoreId, null, null, null)
+                ));
+
         // mock physicalStoreRepository.find
         when(physicalStoreRepository.find(physicalStoreId))
                 .thenReturn(new PhysicalStore(
@@ -79,7 +92,7 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
                         warehouseId,
                         new WarehouseInfo(
                                 new Contact(contactId1, "contact_name_1", "contact_addr_1", "contact_phone_1"),
-                                300, 1000
+                                600, 1000
                         ),
                         Lists.newArrayList(
                                 new Goods(skuCode1, 100, new BigDecimal("100.00")),
@@ -132,7 +145,7 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
         PhysicalStore physicalStore = physicalStoreArgumentCaptor.getValue();
 
         assertThat(physicalStore.getWarehouseInfo().getUsedCapacity())
-                .isEqualTo(600);
+                .isEqualTo(900);
         assertThat(physicalStore.getGoodsList())
                 .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
                 .contains(tuple(skuCode1.getCode(), 200, new BigDecimal("100.00")),
@@ -191,7 +204,7 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
         PhysicalStore physicalStore = physicalStoreArgumentCaptor.getValue();
 
         assertThat(physicalStore.getWarehouseInfo().getUsedCapacity())
-                .isEqualTo(150);
+                .isEqualTo(450);
         assertThat(physicalStore.getGoodsList())
                 .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
                 .contains(tuple(skuCode1.getCode(), 50, new BigDecimal("100.00")),
@@ -224,10 +237,56 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
 
     @Test
     public void transferLogicStore() throws Exception {
+        OrderId orderId = storeService.transferLogicStore(
+                Lists.newArrayList(
+                        new Goods(skuCode1, 50, new BigDecimal("100.00")),
+                        new Goods(skuCode2, 100, new BigDecimal("200.00"))),
+                logicStoreIdFrom,
+                logicStoreId);
+
+        assertThat(orderId)
+                .isNotNull();
+
+        // assert logic store list
+        ArgumentCaptor<LogicStore> logicStoreArgumentCaptor = ArgumentCaptor.forClass(LogicStore.class);
+        verify(logicStoreRepository, times(2)).save(logicStoreArgumentCaptor.capture());
+        List<LogicStore> logicStoreList = logicStoreArgumentCaptor.getAllValues();
+
+        assertThat(logicStoreList)
+                .extracting(logicStore -> logicStore.getLogicStoreId().getId())
+                .contains(logicStoreId.getId(), logicStoreIdFrom.getId());
+
+        assertThat(logicStoreList.stream()
+                .mapToInt(logicStore -> logicStore.getGoodsList().stream()
+                        .mapToInt(Goods::getQty)
+                        .sum())
+                .sum()).isEqualTo(600);
+
+        // assert order
+        ArgumentCaptor<Order> orderArgumentCaptor = ArgumentCaptor.forClass(Order.class);
+        verify(orderRepository).save(orderArgumentCaptor.capture());
+        Order order = orderArgumentCaptor.getValue();
+
+        assertThat(order)
+                .isNotNull()
+                .hasNoNullFieldsOrPropertiesExcept("orderId", "acceptDate");
+        assertThat(order.getSender())
+                .extracting(contact -> contact.getContactId().getId(), Contact::getName, Contact::getAddress, Contact::getTelephone)
+                .contains(contactId1.getId(), "contact_name_1", "contact_addr_1", "contact_phone_1");
+        assertThat(order.getAcceptor())
+                .extracting(contact -> contact.getContactId().getId(), Contact::getName, Contact::getAddress, Contact::getTelephone)
+                .contains(contactId1.getId(), "contact_name_1", "contact_addr_1", "contact_phone_1");
+        assertThat(order.getOrderGoodsList())
+                .isNotNull()
+                .isNotEmpty()
+                .extracting(goods -> goods.getSkuCode().getCode(), Goods::getQty, Goods::getPrice)
+                .contains(tuple(skuCode1.getCode(), 50, new BigDecimal("100.00")),
+                        tuple(skuCode2.getCode(), 100, new BigDecimal("200.00")));
     }
 
     @Test
     public void findSalesStore() throws Exception {
+
     }
 
 }
