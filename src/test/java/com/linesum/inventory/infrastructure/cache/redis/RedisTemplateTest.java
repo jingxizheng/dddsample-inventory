@@ -30,6 +30,8 @@ public class RedisTemplateTest extends BaseJunitTestCase {
 
         Assertions.assertThat(redisValueObject)
                 .hasNoNullFieldsOrProperties();
+
+        Assertions.assertThat(redisTemplate.opsForValue().get("99999999")).isNull();
     }
 
 }

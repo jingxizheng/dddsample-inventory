@@ -1,11 +1,12 @@
 package com.linesum.inventory.application.impl;
 
+import com.google.common.collect.Lists;
 import com.linesum.inventory.BaseJunitTestCase;
 import com.linesum.inventory.application.ApplicationEvents;
 import com.linesum.inventory.application.StoreService;
 import com.linesum.inventory.domain.model.order.*;
 import com.linesum.inventory.domain.model.store.*;
-import org.assertj.core.util.Lists;
+import com.linesum.inventory.domain.model.storeconfig.StoreConfig;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -44,6 +45,12 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
     @Mock
     private ApplicationEvents applicationEvents;
 
+    @Mock
+    private SalesStoreRepository salesStoreRepositoryImpl;
+
+    @Mock
+    private SalesStoreRepository salesStoreRepositoryRedisImpl;
+
     private final SkuCode skuCode1 = new SkuCode(UUID.randomUUID().toString());
     private final SkuCode skuCode2 = new SkuCode(UUID.randomUUID().toString());
 
@@ -60,6 +67,10 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
     private final OrderId orderId = new OrderId(6L);
 
     private final LogicStore.LogicStoreId logicStoreIdFrom = new LogicStore.LogicStoreId(7L);
+
+    private final SalesStore.SalesStoreId salesStoreId = new SalesStore.SalesStoreId(8L);
+
+    private final Channel.ChannelId channelId = new Channel.ChannelId(9L);
 
     @Before
     public void setUp() throws Exception {
@@ -286,6 +297,45 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
 
     @Test
     public void findSalesStore() throws Exception {
+
+        String skuCode = UUID.randomUUID().toString();
+
+        SalesStore salesStore = new SalesStore(
+                salesStoreId,
+                Lists.newArrayList(
+                        new LogicStore(logicStoreId,
+                                Lists.newArrayList(new Goods(new SkuCode(skuCode), 100, new BigDecimal("100.00"))),
+                                new PhysicalStore(physicalStoreId, null, null, null)
+                        )
+                ),
+                new Channel(channelId, "channel_name", Channel.ChannelType.SUPPLIER, null),
+                Lists.newArrayList(
+                        new StoreConfig.SalesRatioConfig(new BigDecimal("0.50"))
+                )
+        );
+
+        // mock salesStoreRepositoryRedisImpl.find - return null
+        when(salesStoreRepositoryRedisImpl.find(salesStoreId)).thenReturn(null);
+
+        // mock salesStoreRepositoryImpl.find
+        when(salesStoreRepositoryImpl.find(salesStoreId)).thenReturn(salesStore);
+
+        // mock salesStoreRepositoryRedisImpl.save
+        when(salesStoreRepositoryRedisImpl.save(any(SalesStore.class))).thenReturn(salesStoreId);
+
+        storeService.findSalesStore(salesStoreId); // first find cache no hit
+        verify(salesStoreRepositoryRedisImpl, times(1)).find(salesStoreId);
+        verify(salesStoreRepositoryImpl, times(1)).find(salesStoreId);
+        verify(salesStoreRepositoryRedisImpl, times(1)).save(any(SalesStore.class));
+
+        // mock salesStoreRepositoryRedisImpl.find - return entity
+        when(salesStoreRepositoryRedisImpl.find(salesStoreId)).thenReturn(salesStore);
+
+        storeService.findSalesStore(salesStoreId); // second find cache hit
+        verify(salesStoreRepositoryRedisImpl, times(2)).find(salesStoreId);
+
+        verify(salesStoreRepositoryImpl, times(1)).find(salesStoreId);
+        verify(salesStoreRepositoryRedisImpl, times(1)).save(any(SalesStore.class));
 
     }
 
