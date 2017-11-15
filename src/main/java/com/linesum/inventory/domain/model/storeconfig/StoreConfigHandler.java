@@ -1,9 +1,6 @@
 package com.linesum.inventory.domain.model.storeconfig;
 
 import com.linesum.inventory.domain.model.store.Goods;
-import com.linesum.inventory.domain.shared.DomainEvent;
-import com.linesum.inventory.domain.shared.ValueObject;
-
 import java.util.List;
 
 /**
@@ -12,5 +9,7 @@ import java.util.List;
 public interface StoreConfigHandler {
 
     List<Goods> handleConfig(StoreConfig storeConfig, List<Goods> goodsListSeed);
+
+    boolean sameConfigAs(StoreConfig other);
 
 }

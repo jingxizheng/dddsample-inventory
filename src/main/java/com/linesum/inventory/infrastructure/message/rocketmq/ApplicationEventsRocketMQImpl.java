@@ -1,8 +1,8 @@
-package com.linesum.inventory.infrastructure.message;
+package com.linesum.inventory.infrastructure.message.rocketmq;
 
 import com.linesum.inventory.application.ApplicationEvents;
 import com.linesum.inventory.domain.model.order.OrderId;
-import com.linesum.inventory.infrastructure.message.config.CommonMQProperties;
+import com.linesum.inventory.infrastructure.message.rocketmq.config.CommonMQProperties;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  * Created by zhengjx on 2017/10/27.
  */
 @Service
-public class ApplicationEventsImpl implements ApplicationEvents {
+public class ApplicationEventsRocketMQImpl implements ApplicationEvents {
 
     @Autowired
     private CommonMQProperties commonMQProperties;
@@ -22,12 +22,12 @@ public class ApplicationEventsImpl implements ApplicationEvents {
     private DefaultMQProducer defaultMQProducer;
 
     @Override
-    public void transferInPhysicalStore(OrderId orderId) {
+    public void inStoreStart(OrderId orderId) {
         sendMsg("STORE_IN", orderId.idString(), orderId.idString());
     }
 
     @Override
-    public void transferOutPhysicalStore(OrderId orderId) {
+    public void outStoreStart(OrderId orderId) {
         sendMsg("STORE_OUT", orderId.idString(), orderId.idString());
     }
 

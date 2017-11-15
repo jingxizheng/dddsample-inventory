@@ -1,4 +1,4 @@
-package com.linesum.inventory.infrastructure.message.config;
+package com.linesum.inventory.infrastructure.message.rocketmq.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

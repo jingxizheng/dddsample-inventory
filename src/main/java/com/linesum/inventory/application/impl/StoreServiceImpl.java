@@ -1,15 +1,14 @@
 package com.linesum.inventory.application.impl;
 
-import com.linesum.inventory.application.ApplicationEvents;
+import com.linesum.inventory.application.ApplicationEventsPub;
 import com.linesum.inventory.application.StoreService;
 import com.linesum.inventory.domain.model.order.*;
 import com.linesum.inventory.domain.model.store.*;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import javax.annotation.Resource;
 import java.util.List;
 import java.util.Optional;
+import javax.annotation.Resource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StoreServiceImpl implements StoreService {
@@ -24,7 +23,7 @@ public class StoreServiceImpl implements StoreService {
     private OrderRepository orderRepository;
 
     @Resource
-    private ApplicationEvents applicationEvents;
+    private ApplicationEventsPub applicationEventsPub;
 
     @Resource
     private ContactRepository contactRepository;
@@ -55,7 +54,7 @@ public class StoreServiceImpl implements StoreService {
         physicalStoreRepository.save(physicalStore);
 
         OrderId orderId = orderRepository.save(order);
-        applicationEvents.transferInPhysicalStore(orderId);
+        applicationEventsPub.inStoreStart(orderId);
         return orderId;
     }
 
@@ -77,7 +76,7 @@ public class StoreServiceImpl implements StoreService {
         logicStoreRepository.save(logicStore);
         physicalStoreRepository.save(physicalStore);
         OrderId orderId = orderRepository.save(order);
-        applicationEvents.transferOutPhysicalStore(orderId);
+        applicationEventsPub.outStoreStart(orderId);
         return orderId;
     }
 

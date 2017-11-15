@@ -21,7 +21,7 @@ public class StoreConfigExecutor {
         for (StoreConfig storeConfig : storeConfigList) {
 
             Optional<StoreConfigHandler> storeConfigHandlerOptional = storeConfigHandlerList.stream()
-                    .filter(handler -> handler.sameEventAs(storeConfig))
+                    .filter(handler -> handler.sameConfigAs(storeConfig))
                     .findFirst();// return an optional
 
             if (storeConfigHandlerOptional.isPresent()) {

@@ -31,6 +31,7 @@ public class StoreConfigHandlerImpl {
             return goodsListSeed;
         }
 
+        @Override
         public boolean sameConfigAs(StoreConfig other) {
             return other instanceof StoreConfig.SalesRatioConfig;
         }

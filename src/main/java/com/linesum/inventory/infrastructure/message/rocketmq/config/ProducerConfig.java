@@ -1,4 +1,4 @@
-package com.linesum.inventory.infrastructure.message.config;
+package com.linesum.inventory.infrastructure.message.rocketmq.config;
 
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.springframework.beans.factory.annotation.Autowired;

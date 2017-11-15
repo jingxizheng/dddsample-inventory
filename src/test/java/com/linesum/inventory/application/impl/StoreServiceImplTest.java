@@ -124,8 +124,8 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
         when(orderRepository.save(any(Order.class)))
                 .thenReturn(orderId);
 
-        // mock applicationEvents.transferInPhysicalStore
-        doNothing().when(applicationEvents).transferInPhysicalStore(orderId);
+        // mock applicationEvents.inStoreStart
+        doNothing().when(applicationEvents).inStoreStart(orderId);
     }
 
     @Test
@@ -184,7 +184,7 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
                         tuple(skuCode2.getCode(), 200, new BigDecimal("200.00")));
 
         // assert event publish
-        verify(applicationEvents, times(1)).transferInPhysicalStore(orderId);
+        verify(applicationEvents, times(1)).inStoreStart(orderId);
     }
 
     @Test
@@ -243,7 +243,7 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
                         tuple(skuCode2.getCode(), 100, new BigDecimal("200.00")));
 
         // assert event publish
-        verify(applicationEvents, times(1)).transferOutPhysicalStore(orderId);
+        verify(applicationEvents, times(1)).outStoreStart(orderId);
     }
 
     @Test
