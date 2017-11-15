@@ -33,8 +33,8 @@ public class Order implements Entity<Order> {
         this.sendDate = sendDate;
     }
 
-    public void accept() {
-        this.acceptDate = new Date();
+    public void accept(final Date date) {
+        this.acceptDate = date;
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * 库存规则处理器
  */
-public interface StoreConfigHandler extends DomainEvent<StoreConfig> {
+public interface StoreConfigHandler {
 
     List<Goods> handleConfig(StoreConfig storeConfig, List<Goods> goodsListSeed);
 

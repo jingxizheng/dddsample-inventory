@@ -21,7 +21,7 @@ public class StoreConfigHandlerImpl {
 
         @Override
         public List<Goods> handleConfig(StoreConfig storeConfig, List<Goods> goodsListSeed) {
-            if (!this.sameEventAs(storeConfig)) {
+            if (!this.sameConfigAs(storeConfig)) {
                 LOGGER.error("sales ratio config not match");
             } else {
                 StoreConfig.SalesRatioConfig salesRatioConfig = (StoreConfig.SalesRatioConfig) storeConfig;
@@ -31,8 +31,7 @@ public class StoreConfigHandlerImpl {
             return goodsListSeed;
         }
 
-        @Override
-        public boolean sameEventAs(StoreConfig other) {
+        public boolean sameConfigAs(StoreConfig other) {
             return other instanceof StoreConfig.SalesRatioConfig;
         }
     }
