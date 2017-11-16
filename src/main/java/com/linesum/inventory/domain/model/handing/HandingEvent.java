@@ -27,6 +27,18 @@ public class HandingEvent implements DomainEvent<HandingEvent> {
         this.order.accept(acceptDate);
     }
 
+    public Order getOrder() {
+        return order;
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    public Date getAcceptDate() {
+        return acceptDate;
+    }
+
     @Override
     public boolean sameEventAs(HandingEvent other) {
         return other != null

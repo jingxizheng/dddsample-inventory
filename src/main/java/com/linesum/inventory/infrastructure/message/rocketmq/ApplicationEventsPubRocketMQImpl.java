@@ -1,19 +1,19 @@
 package com.linesum.inventory.infrastructure.message.rocketmq;
 
-import com.linesum.inventory.application.ApplicationEvents;
+import com.linesum.inventory.application.ApplicationEventsPub;
 import com.linesum.inventory.domain.model.order.OrderId;
 import com.linesum.inventory.infrastructure.message.rocketmq.config.CommonMQProperties;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
 import org.apache.rocketmq.common.message.Message;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 /**
  * Created by zhengjx on 2017/10/27.
  */
-@Service
-public class ApplicationEventsRocketMQImpl implements ApplicationEvents {
+@Component
+public class ApplicationEventsPubRocketMQImpl implements ApplicationEventsPub {
 
     @Autowired
     private CommonMQProperties commonMQProperties;
