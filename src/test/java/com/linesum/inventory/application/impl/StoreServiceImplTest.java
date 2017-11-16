@@ -2,7 +2,7 @@ package com.linesum.inventory.application.impl;
 
 import com.google.common.collect.Lists;
 import com.linesum.inventory.BaseJunitTestCase;
-import com.linesum.inventory.application.ApplicationEvents;
+import com.linesum.inventory.application.ApplicationEventsPub;
 import com.linesum.inventory.application.StoreService;
 import com.linesum.inventory.domain.model.order.*;
 import com.linesum.inventory.domain.model.store.*;
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.*;
 /**
  * Created by zhengjx on 2017/11/6.
  */
-public class StoreServiceImplTest extends BaseJunitTestCase {
+public class StoreServiceImplTest {
 
     @InjectMocks
     private StoreService storeService = new StoreServiceImpl();
@@ -43,7 +43,7 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
     private ContactRepository contactRepository;
 
     @Mock
-    private ApplicationEvents applicationEvents;
+    private ApplicationEventsPub applicationEventsPub;
 
     @Mock
     private SalesStoreRepository salesStoreRepositoryImpl;
@@ -124,8 +124,8 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
         when(orderRepository.save(any(Order.class)))
                 .thenReturn(orderId);
 
-        // mock applicationEvents.inStoreStart
-        doNothing().when(applicationEvents).inStoreStart(orderId);
+        // mock applicationEventsPub.inStoreStart
+        doNothing().when(applicationEventsPub).inStoreStart(orderId);
     }
 
     @Test
@@ -184,7 +184,7 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
                         tuple(skuCode2.getCode(), 200, new BigDecimal("200.00")));
 
         // assert event publish
-        verify(applicationEvents, times(1)).inStoreStart(orderId);
+        verify(applicationEventsPub, times(1)).inStoreStart(orderId);
     }
 
     @Test
@@ -243,7 +243,7 @@ public class StoreServiceImplTest extends BaseJunitTestCase {
                         tuple(skuCode2.getCode(), 100, new BigDecimal("200.00")));
 
         // assert event publish
-        verify(applicationEvents, times(1)).outStoreStart(orderId);
+        verify(applicationEventsPub, times(1)).outStoreStart(orderId);
     }
 
     @Test
