@@ -5,7 +5,7 @@
 ### 实体
 - 唯一的身份标识
 - 可变性(mutability)
-- eg. 物理库存[Goods](src/main/java/com/linesum/inventory/domain/model/store/Goods.java)
+- eg. 物理库存[PhysicalStore](src/main/java/com/linesum/inventory/domain/model/store/PhysicalStore.java)
 
 ### 值对象
 - 不变性(类修饰为final，实例初始化后属性状态不可变更)
