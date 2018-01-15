@@ -1,7 +1,6 @@
-package com.linesum.inventory.infrastructure.persistence.jpa.po;
+package com.linesum.inventory.infrastructure.persistence.po;
 
 import javax.persistence.*;
-import java.util.List;
 
 /**
  * Created by zhengjx on 2017/10/25.
@@ -11,7 +10,7 @@ import java.util.List;
 public class PhysicalStorePo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long warehouseId;

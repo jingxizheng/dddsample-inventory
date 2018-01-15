@@ -1,4 +1,6 @@
-package com.linesum.inventory.domain.model.store;
+package com.linesum.inventory.domain.repository;
+
+import com.linesum.inventory.domain.model.store.PhysicalStore;
 
 public interface PhysicalStoreRepository {
 

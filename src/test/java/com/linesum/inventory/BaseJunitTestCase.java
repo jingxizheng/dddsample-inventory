@@ -1,6 +1,5 @@
 package com.linesum.inventory;
 
-import com.linesum.inventory.Application;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;

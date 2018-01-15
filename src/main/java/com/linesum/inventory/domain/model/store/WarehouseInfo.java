@@ -9,11 +9,19 @@ import org.apache.commons.logging.LogFactory;
 
 /**
  * 仓库信息
+ * 此处仓库信息作为一个值对象是一个糟糕的实践，它违背了不变性，概念整体，值对象创建后应该是不予许被更改的。
+ *
+ * INFO 一个值对象可以只处理单个属性，也可以处理一组相关联的属性。
+ * 在这组相关联的属性中，每一个属性都是整体属性所不可或缺的组成部分。
+ * 如果一组属性联合起来并不能表达一个整体上的概念，那么这种联合并无多大用处，体现概念整体。
  */
 public class WarehouseInfo implements ValueObject<WarehouseInfo> {
 
     private final static Log LOGGER = LogFactory.getLog(WarehouseInfo.class);
 
+    /*
+     * INFO 在值对象中存在实体的引用，保持不变性、表达性和方便性，需要谨慎使用避免实体对象违背值对象的不变性
+     */
     private Contact contact;
 
     private Integer usedCapacity;

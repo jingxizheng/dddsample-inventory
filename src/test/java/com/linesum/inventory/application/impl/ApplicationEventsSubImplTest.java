@@ -3,6 +3,7 @@ package com.linesum.inventory.application.impl;
 import com.linesum.inventory.domain.model.order.*;
 import com.linesum.inventory.domain.model.store.Goods;
 import com.linesum.inventory.domain.model.store.SkuCode;
+import com.linesum.inventory.domain.repository.OrderRepository;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.Before;

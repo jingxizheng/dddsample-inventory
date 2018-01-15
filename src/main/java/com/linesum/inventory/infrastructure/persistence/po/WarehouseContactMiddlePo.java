@@ -1,4 +1,4 @@
-package com.linesum.inventory.infrastructure.persistence.jpa.po;
+package com.linesum.inventory.infrastructure.persistence.po;
 
 import javax.persistence.*;
 
@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class WarehouseContactMiddlePo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long contactId;

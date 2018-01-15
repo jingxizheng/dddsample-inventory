@@ -1,0 +1,12 @@
+package com.linesum.inventory.infrastructure.persistence.mapper;
+
+import com.linesum.inventory.infrastructure.persistence.po.LogicStorePo;
+import org.springframework.stereotype.Repository;
+import tk.mybatis.mapper.common.Mapper;
+
+/**
+ * Created by zhengjx on 2017/10/27.
+ */
+@Repository
+public interface LogicStoreMapper extends Mapper<LogicStorePo> {
+}

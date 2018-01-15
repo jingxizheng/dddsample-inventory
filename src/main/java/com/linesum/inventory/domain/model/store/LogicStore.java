@@ -40,7 +40,7 @@ public class LogicStore implements Entity<LogicStore> {
                 new Date());
     }
 
-    private void add(List<Goods> pendingGoodsList) {
+    public void add(List<Goods> pendingGoodsList) {
         for (Goods addGoods : pendingGoodsList) {
             for (Goods storeGoods : this.goodsList) {
                 if (addGoods.sameIdentityAs(storeGoods)) {
@@ -61,7 +61,7 @@ public class LogicStore implements Entity<LogicStore> {
                 new Date());
     }
 
-    private void reduce(List<Goods> pendingGoodsList) {
+    public void reduce(List<Goods> pendingGoodsList) {
         for (Goods reduceGoods : pendingGoodsList) {
             for (Goods storeGoods : this.goodsList) {
                 if (reduceGoods.sameIdentityAs(storeGoods)) {
@@ -73,6 +73,8 @@ public class LogicStore implements Entity<LogicStore> {
 
     /**
      * SUGGEST better implement in domain service
+     * @deprecated
+     * @see com.linesum.inventory.domain.service.TransferService
      */
     public Order transfer(List<Goods> pendingGoodsList, OrderId orderId, LogicStore from) throws TransferException {
         if (!this.somePhysicalStoreAs(from)) {

@@ -1,7 +1,7 @@
 package com.linesum.inventory.infrastructure.persistence.jpa;
 
 import com.linesum.inventory.BaseJunitTestCase;
-import com.linesum.inventory.infrastructure.persistence.jpa.po.GoodsPo;
+import com.linesum.inventory.infrastructure.persistence.po.GoodsPo;
 import org.assertj.core.api.Assertions;
 import org.junit.Before;
 import org.junit.Test;

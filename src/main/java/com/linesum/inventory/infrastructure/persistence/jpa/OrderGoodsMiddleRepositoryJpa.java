@@ -1,6 +1,6 @@
 package com.linesum.inventory.infrastructure.persistence.jpa;
 
-import com.linesum.inventory.infrastructure.persistence.jpa.po.OrderGoodsMiddlePo;
+import com.linesum.inventory.infrastructure.persistence.po.OrderGoodsMiddlePo;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

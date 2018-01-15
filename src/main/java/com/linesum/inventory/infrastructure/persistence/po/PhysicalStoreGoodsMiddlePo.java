@@ -1,4 +1,4 @@
-package com.linesum.inventory.infrastructure.persistence.jpa.po;
+package com.linesum.inventory.infrastructure.persistence.po;
 
 import javax.persistence.*;
 
@@ -6,25 +6,25 @@ import javax.persistence.*;
  * Created by zhengjx on 2017/10/25.
  */
 @Entity
-@Table(name = "logic_store_goods_middle")
-public class LogicStoreGoodsMiddlePo {
+@Table(name = "physical_store_goods_middle")
+public class PhysicalStoreGoodsMiddlePo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long logicStoreId;
+    private Long physicalStoreId;
 
     private Long goodsId;
 
     private Integer qty;
 
-    public LogicStoreGoodsMiddlePo() {
+    public PhysicalStoreGoodsMiddlePo() {
     }
 
-    public LogicStoreGoodsMiddlePo(Long id, Long logicStoreId, Long goodsId, Integer qty) {
+    public PhysicalStoreGoodsMiddlePo(Long id, Long physicalStoreId, Long goodsId, Integer qty) {
         this.id = id;
-        this.logicStoreId = logicStoreId;
+        this.physicalStoreId = physicalStoreId;
         this.goodsId = goodsId;
         this.qty = qty;
     }
@@ -37,12 +37,12 @@ public class LogicStoreGoodsMiddlePo {
         this.id = id;
     }
 
-    public Long getLogicStoreId() {
-        return logicStoreId;
+    public Long getPhysicalStoreId() {
+        return physicalStoreId;
     }
 
-    public void setLogicStoreId(Long logicStoreId) {
-        this.logicStoreId = logicStoreId;
+    public void setPhysicalStoreId(Long physicalStoreId) {
+        this.physicalStoreId = physicalStoreId;
     }
 
     public Long getGoodsId() {

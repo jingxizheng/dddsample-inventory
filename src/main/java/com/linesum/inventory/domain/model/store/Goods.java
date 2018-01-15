@@ -10,6 +10,8 @@ import java.util.Objects;
 
 /**
  * 商品
+ *
+ * 这里商品中的qty 和 price 作为一个概念整体可建模为一个值对象，描述单据中的商品明细
  */
 public class Goods implements Entity<Goods> {
 

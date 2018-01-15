@@ -1,4 +1,4 @@
-package com.linesum.inventory.infrastructure.persistence.jpa.po;
+package com.linesum.inventory.infrastructure.persistence.po;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 public class GoodsPo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String skuCode;

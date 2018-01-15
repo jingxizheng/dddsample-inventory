@@ -4,7 +4,7 @@ import com.linesum.inventory.application.ApplicationEventsSub;
 import com.linesum.inventory.domain.model.handing.HandingEvent;
 import com.linesum.inventory.domain.model.order.Order;
 import com.linesum.inventory.domain.model.order.OrderId;
-import com.linesum.inventory.domain.model.order.OrderRepository;
+import com.linesum.inventory.domain.repository.OrderRepository;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

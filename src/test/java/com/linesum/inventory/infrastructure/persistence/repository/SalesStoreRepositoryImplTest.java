@@ -1,11 +1,13 @@
 package com.linesum.inventory.infrastructure.persistence.repository;
 
+import com.linesum.inventory.BaseJunitTestCase;
 import com.linesum.inventory.domain.model.order.Contact;
 import com.linesum.inventory.domain.model.order.ContactId;
 import com.linesum.inventory.domain.model.store.*;
-import com.linesum.inventory.BaseJunitTestCase;
+import com.linesum.inventory.domain.repository.LogicStoreRepository;
+import com.linesum.inventory.domain.repository.PhysicalStoreRepository;
 import com.linesum.inventory.infrastructure.persistence.jpa.*;
-import com.linesum.inventory.infrastructure.persistence.jpa.po.*;
+import com.linesum.inventory.infrastructure.persistence.po.*;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.util.Lists;
 import org.junit.Before;

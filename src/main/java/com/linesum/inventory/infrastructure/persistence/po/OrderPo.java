@@ -1,4 +1,4 @@
-package com.linesum.inventory.infrastructure.persistence.jpa.po;
+package com.linesum.inventory.infrastructure.persistence.po;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -11,7 +11,7 @@ import java.util.Date;
 public class OrderPo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private Long senderId;

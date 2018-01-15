@@ -1,4 +1,4 @@
-package com.linesum.inventory.infrastructure.persistence.jpa.po;
+package com.linesum.inventory.infrastructure.persistence.po;
 
 import com.linesum.inventory.domain.model.store.Channel;
 
@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class ChannelPo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;

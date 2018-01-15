@@ -1,12 +1,12 @@
 package com.linesum.inventory.application.impl;
 
 import com.google.common.collect.Lists;
-import com.linesum.inventory.BaseJunitTestCase;
 import com.linesum.inventory.application.ApplicationEventsPub;
 import com.linesum.inventory.application.StoreService;
 import com.linesum.inventory.domain.model.order.*;
 import com.linesum.inventory.domain.model.store.*;
 import com.linesum.inventory.domain.model.storeconfig.StoreConfig;
+import com.linesum.inventory.domain.repository.*;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;

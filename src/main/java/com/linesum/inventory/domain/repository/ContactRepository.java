@@ -1,4 +1,4 @@
-package com.linesum.inventory.domain.model.store;
+package com.linesum.inventory.domain.repository;
 
 import com.linesum.inventory.domain.model.order.Contact;
 import com.linesum.inventory.domain.model.order.ContactId;

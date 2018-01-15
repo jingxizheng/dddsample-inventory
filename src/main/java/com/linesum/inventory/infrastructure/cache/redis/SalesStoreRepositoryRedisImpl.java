@@ -2,7 +2,7 @@ package com.linesum.inventory.infrastructure.cache.redis;
 
 import com.alibaba.fastjson.JSONObject;
 import com.linesum.inventory.domain.model.store.SalesStore;
-import com.linesum.inventory.domain.model.store.SalesStoreRepository;
+import com.linesum.inventory.domain.repository.SalesStoreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;

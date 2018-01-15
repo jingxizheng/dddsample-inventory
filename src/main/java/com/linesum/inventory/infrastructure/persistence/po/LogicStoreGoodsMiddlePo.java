@@ -1,27 +1,30 @@
-package com.linesum.inventory.infrastructure.persistence.jpa.po;
+package com.linesum.inventory.infrastructure.persistence.po;
 
 import javax.persistence.*;
 
 /**
- * Created by zhengjx on 2017/11/2.
+ * Created by zhengjx on 2017/10/25.
  */
 @Entity
-@Table(name = "order_goods_middle")
-public class OrderGoodsMiddlePo {
+@Table(name = "logic_store_goods_middle")
+public class LogicStoreGoodsMiddlePo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long orderId;
+    private Long logicStoreId;
 
     private Long goodsId;
 
     private Integer qty;
 
-    public OrderGoodsMiddlePo(Long id, Long orderId, Long goodsId, Integer qty) {
+    public LogicStoreGoodsMiddlePo() {
+    }
+
+    public LogicStoreGoodsMiddlePo(Long id, Long logicStoreId, Long goodsId, Integer qty) {
         this.id = id;
-        this.orderId = orderId;
+        this.logicStoreId = logicStoreId;
         this.goodsId = goodsId;
         this.qty = qty;
     }
@@ -34,12 +37,12 @@ public class OrderGoodsMiddlePo {
         this.id = id;
     }
 
-    public Long getOrderId() {
-        return orderId;
+    public Long getLogicStoreId() {
+        return logicStoreId;
     }
 
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
+    public void setLogicStoreId(Long logicStoreId) {
+        this.logicStoreId = logicStoreId;
     }
 
     public Long getGoodsId() {
