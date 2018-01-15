@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apacke.activemq:activemq-broker:unknown">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apacke/activemq/activemq-broker/unknown/activemq-broker-unknown.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apacke/activemq/activemq-broker/unknown/activemq-broker-unknown-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/apacke/activemq/activemq-broker/unknown/activemq-broker-unknown-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
